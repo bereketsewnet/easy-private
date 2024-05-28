@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:whats_app_ui/Model/ChatModel.dart';
+import 'package:Easy/Model/ChatModel.dart';
 
 class ContactCard extends StatelessWidget {
   const ContactCard({super.key, required this.chatModel});

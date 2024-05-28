@@ -1,0 +1,15 @@
+{
+  "name": "server_backend",
+  "version": "1.0.0",
+  "description": "this server work for easy backend managmet by node express api and web-socket connection",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Bereket Sewnet",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "nodemon": "^3.1.1"
+  }
+}

@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:whats_app_ui/CustomUi/AvatarCard.dart';
+import 'package:Easy/CustomUi/AvatarCard.dart';
 
 import '../CustomUi/ButtomCard.dart';
 import '../CustomUi/ContactCard.dart';

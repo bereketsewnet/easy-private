@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:whats_app_ui/CustomUi/ReplyCard.dart';
-import 'package:whats_app_ui/Screens/CameraScreen.dart';
-import 'package:whats_app_ui/colors.dart';
+import 'package:Easy/CustomUi/ReplyCard.dart';
+import 'package:Easy/Screens/CameraScreen.dart';
+import 'package:Easy/colors.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 
 import '../CustomUi/OwnMessageCard.dart';

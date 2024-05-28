@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:whats_app_ui/Screens/CallScreen.dart';
-import 'package:whats_app_ui/pages/CameraPage.dart';
-import 'package:whats_app_ui/pages/ChatsPage.dart';
-import 'package:whats_app_ui/pages/StatusPage.dart';
+import 'package:Easy/Screens/CallScreen.dart';
+import 'package:Easy/pages/CameraPage.dart';
+import 'package:Easy/pages/ChatsPage.dart';
+import 'package:Easy/pages/StatusPage.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

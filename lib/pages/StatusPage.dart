@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:whats_app_ui/CustomUi/StatusPageUi/HeadOwnStatus.dart';
-import 'package:whats_app_ui/CustomUi/StatusPageUi/OtherStatus.dart';
+import 'package:Easy/CustomUi/StatusPageUi/HeadOwnStatus.dart';
+import 'package:Easy/CustomUi/StatusPageUi/OtherStatus.dart';
 
 class StatusPage extends StatefulWidget {
   const StatusPage({super.key});

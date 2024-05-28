@@ -1,6 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:whats_app_ui/Model/ChatModel.dart';
+import 'package:Easy/Model/ChatModel.dart';
 
 class AvatarCard extends StatelessWidget {
   const AvatarCard({super.key, required this.contact});

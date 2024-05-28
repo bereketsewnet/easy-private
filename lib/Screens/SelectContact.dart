@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:whats_app_ui/CustomUi/ButtomCard.dart';
-import 'package:whats_app_ui/CustomUi/ContactCard.dart';
-import 'package:whats_app_ui/Screens/CreateGroup.dart';
+import 'package:Easy/CustomUi/ButtomCard.dart';
+import 'package:Easy/CustomUi/ContactCard.dart';
+import 'package:Easy/Screens/CreateGroup.dart';
 
 import '../Model/ChatModel.dart';
 

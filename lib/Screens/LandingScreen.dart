@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:whats_app_ui/Screens/homeScreen.dart';
+import 'package:Easy/Screens/homeScreen.dart';
 
 class LandingScreen extends StatelessWidget {
   const LandingScreen({super.key});

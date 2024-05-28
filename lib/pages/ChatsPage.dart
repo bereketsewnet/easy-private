@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:whats_app_ui/CustomUi/CustomCard.dart';
-import 'package:whats_app_ui/Screens/SelectContact.dart';
+import 'package:Easy/CustomUi/CustomCard.dart';
+import 'package:Easy/Screens/SelectContact.dart';
 
 import '../Model/ChatModel.dart';
 

@@ -4,8 +4,8 @@ import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:whats_app_ui/Screens/PhotoView.dart';
-import 'package:whats_app_ui/Screens/VideoView.dart';
+import 'package:Easy/Screens/PhotoView.dart';
+import 'package:Easy/Screens/VideoView.dart';
 
 import '../main.dart';
 

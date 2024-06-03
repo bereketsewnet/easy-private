@@ -1,20 +1,19 @@
-import 'package:Easy/CustomUi/CustomTtextFormFeild.dart';
-import 'package:Easy/Screens/RegisterScreen.dart';
-import 'package:Easy/colors.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:Easy/Screens/LoginScreen.dart';
+import 'package:Easy/Screens/RegisterFromScreen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+import '../CustomUi/CustomTtextFormFeild.dart';
+import '../colors.dart';
+
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -29,7 +28,6 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     var size = MediaQuery.sizeOf(context);
     final _formKey = GlobalKey<FormState>();
-
     return Scaffold(
       backgroundColor: Colors.white.withOpacity(0.9),
       body: Column(
@@ -55,7 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 const SizedBox(height: 10),
                 const Text(
-                  'Login',
+                  'Register',
                   style: TextStyle(fontWeight: FontWeight.w700),
                 ),
                 Padding(
@@ -83,31 +81,42 @@ class _LoginScreenState extends State<LoginScreen> {
                               color: primary,
                             ),
                             CustomTextFormFeild(
-                                lable: 'Password',
-                                controller: _passwordController),
+                              lable: 'Password',
+                              controller: _passwordController,
+                            ),
                           ],
                         ),
                         Align(
                           alignment: Alignment.center,
-                          child: Container(
-                            margin: const EdgeInsets.only(top: 25),
-                            alignment: Alignment.center,
-                            width: MediaQuery.of(context).size.width - 210,
-                            height: 45,
-                            child: Card(
-                              elevation: 8,
-                              margin: const EdgeInsets.all(0),
-                              color: primary,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              child: const Center(
-                                child: Text(
-                                  'LogIn',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 15,
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (builder) => const RegisterFromScreen(),
+                                ),
+                              );
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.only(top: 25),
+                              alignment: Alignment.center,
+                              width: MediaQuery.of(context).size.width - 210,
+                              height: 45,
+                              child: Card(
+                                elevation: 8,
+                                margin: const EdgeInsets.all(0),
+                                color: primary,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                                child: const Center(
+                                  child: Text(
+                                    'Create',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 15,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -115,11 +124,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                         const SizedBox(height: 10),
-                          Row(
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             const Text(
-                              'You haven\'t an account? ',
+                              'Already you have an account? ',
                               style: TextStyle(
                                 color: Colors.black,
                               ),
@@ -129,12 +138,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => const RegisterScreen(),
+                                    builder: (context) => const LoginScreen(),
                                   ),
                                 );
                               },
                               child: const Text(
-                                'Sign Up',
+                                'Log In',
                                 style: TextStyle(
                                   color: primary,
                                   fontWeight: FontWeight.bold,
@@ -150,7 +159,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ],
             ),
           ),
-         const SizedBox(height: 20),
+          const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

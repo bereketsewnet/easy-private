@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:Easy/Screens/homeScreen.dart';
+import 'package:Easy/pages/HomePage.dart';
 
 class LandingScreen extends StatelessWidget {
   const LandingScreen({super.key});
@@ -67,7 +67,7 @@ class LandingScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (builder) => const HomeScreen(),
+                      builder: (builder) => const HomePage(),
                     ),
                   );
                 },

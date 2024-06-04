@@ -1,18 +1,18 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:Easy/Screens/CallScreen.dart';
+import 'package:Easy/pages/CallHistoryPage.dart';
 import 'package:Easy/pages/CameraPage.dart';
 import 'package:Easy/pages/ChatsPage.dart';
 import 'package:Easy/pages/StatusPage.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _HomeScreenState extends State<HomeScreen>
+class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
@@ -96,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen>
           CameraPage(),
           ChatPage(),
           StatusPage(),
-          CallScreen(),
+          CallHistoryPage(),
         ],
       ),
     );

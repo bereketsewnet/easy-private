@@ -1,9 +1,7 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
-class CallScreen extends StatelessWidget {
-  const CallScreen({super.key});
+class CallHistoryPage extends StatelessWidget {
+  const CallHistoryPage({super.key});
 
   @override
   Widget build(BuildContext context) {

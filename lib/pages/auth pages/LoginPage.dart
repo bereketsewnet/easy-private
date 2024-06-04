@@ -1,19 +1,18 @@
-import 'package:Easy/Screens/LoginScreen.dart';
-import 'package:Easy/Screens/RegisterFromScreen.dart';
+import 'package:Easy/pages/auth%20pages/RegisterPage.dart';
+import 'package:Easy/common/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../CustomUi/CustomTtextFormFeild.dart';
-import '../colors.dart';
+import '../../common/custom_widget/CustomTtextFormFeild.dart';
 
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -28,6 +27,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     var size = MediaQuery.sizeOf(context);
     final _formKey = GlobalKey<FormState>();
+
     return Scaffold(
       backgroundColor: Colors.white.withOpacity(0.9),
       body: Column(
@@ -53,7 +53,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               children: [
                 const SizedBox(height: 10),
                 const Text(
-                  'Register',
+                  'Login',
                   style: TextStyle(fontWeight: FontWeight.w700),
                 ),
                 Padding(
@@ -81,42 +81,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               color: primary,
                             ),
                             CustomTextFormFeild(
-                              lable: 'Password',
-                              controller: _passwordController,
-                            ),
+                                lable: 'Password',
+                                controller: _passwordController),
                           ],
                         ),
                         Align(
                           alignment: Alignment.center,
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (builder) => const RegisterFromScreen(),
-                                ),
-                              );
-                            },
-                            child: Container(
-                              margin: const EdgeInsets.only(top: 25),
-                              alignment: Alignment.center,
-                              width: MediaQuery.of(context).size.width - 210,
-                              height: 45,
-                              child: Card(
-                                elevation: 8,
-                                margin: const EdgeInsets.all(0),
-                                color: primary,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                                child: const Center(
-                                  child: Text(
-                                    'Create',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 15,
-                                    ),
+                          child: Container(
+                            margin: const EdgeInsets.only(top: 25),
+                            alignment: Alignment.center,
+                            width: MediaQuery.of(context).size.width - 210,
+                            height: 45,
+                            child: Card(
+                              elevation: 8,
+                              margin: const EdgeInsets.all(0),
+                              color: primary,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  'LogIn',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 15,
                                   ),
                                 ),
                               ),
@@ -124,11 +113,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                         ),
                         const SizedBox(height: 10),
-                        Row(
+                          Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             const Text(
-                              'Already you have an account? ',
+                              'You haven\'t an account? ',
                               style: TextStyle(
                                 color: Colors.black,
                               ),
@@ -138,12 +127,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => const LoginScreen(),
+                                    builder: (context) => const RegisterPage(),
                                   ),
                                 );
                               },
                               child: const Text(
-                                'Log In',
+                                'Sign Up',
                                 style: TextStyle(
                                   color: primary,
                                   fontWeight: FontWeight.bold,
@@ -159,7 +148,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ],
             ),
           ),
-          const SizedBox(height: 20),
+         const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

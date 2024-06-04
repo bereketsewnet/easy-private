@@ -1,14 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:Easy/CustomUi/ReplyCard.dart';
-import 'package:Easy/Screens/CameraScreen.dart';
-import 'package:Easy/colors.dart';
+import 'package:Easy/common/utils/colors.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
-
-import '../CustomUi/OwnMessageCard.dart';
-import '../Model/ChatModel.dart';
+import '../../Model/ChatModel.dart';
+import '../../common/custom_widget/OwnMessageCard.dart';
+import '../../common/custom_widget/ReplyCard.dart';
+import '../Screens/CameraScreen.dart';
 
 class IndividualPage extends StatefulWidget {
   const IndividualPage({super.key, required this.chatModel});

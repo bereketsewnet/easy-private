@@ -1,13 +1,10 @@
 import 'dart:math';
-
 import 'package:camera/camera.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:Easy/Screens/PhotoView.dart';
-import 'package:Easy/Screens/VideoView.dart';
 
-import '../main.dart';
+import '../../main.dart';
+import 'PhotoViewScreen.dart';
+import 'VideoViewScreen.dart';
 
 class CameraScreen extends StatefulWidget {
   const CameraScreen({super.key});
@@ -111,7 +108,7 @@ class _CameraScreenState extends State<CameraScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (builder) => VideoView(
+                                builder: (builder) => VideoViewScreen(
                                   path: videoPath.path,
                                 ),
                               ),
@@ -176,7 +173,7 @@ class _CameraScreenState extends State<CameraScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => PhotoViewPage(path: path.path),
+        builder: (context) => PhotoViewScreen(path: path.path),
       ),
     );
   }

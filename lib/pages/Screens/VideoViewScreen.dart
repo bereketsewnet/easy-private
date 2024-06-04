@@ -1,12 +1,35 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:video_player/video_player.dart';
 
-class PhotoViewPage extends StatelessWidget {
-  const PhotoViewPage({super.key, required this.path});
+class VideoViewScreen extends StatefulWidget {
+  const VideoViewScreen({super.key, required this.path});
+
   final String path;
+
+  @override
+  State<VideoViewScreen> createState() => _VideoViewScreenState();
+}
+
+class _VideoViewScreenState extends State<VideoViewScreen> {
+  late VideoPlayerController _videoPlayerController;
+
+  @override
+  void initState() {
+    _videoPlayerController = VideoPlayerController.file(File(widget.path))
+      ..initialize().then((_) {
+        setState(() {});
+      });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _videoPlayerController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,12 +79,12 @@ class PhotoViewPage extends StatelessWidget {
             SizedBox(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height - 150,
-              child: Image.file(
-                fit: BoxFit.cover,
-                File(
-                  path,
-                ),
-              ),
+              child: _videoPlayerController.value.isInitialized
+                  ? AspectRatio(
+                      aspectRatio: _videoPlayerController.value.aspectRatio,
+                      child: VideoPlayer(_videoPlayerController),
+                    )
+                  : Container(),
             ),
             Positioned(
               bottom: 0,
@@ -85,7 +108,7 @@ class PhotoViewPage extends StatelessWidget {
                       size: 27,
                     ),
                     suffixIcon: InkWell(
-                      onTap: (){},
+                      onTap: () {},
                       child: CircleAvatar(
                         backgroundColor: Colors.tealAccent[700],
                         radius: 25,
@@ -100,6 +123,30 @@ class PhotoViewPage extends StatelessWidget {
                       color: Colors.white,
                       fontSize: 17,
                     ),
+                  ),
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.center,
+              child: InkWell(
+                onTap: () {
+
+                  setState(() {
+                    _videoPlayerController.value.isPlaying
+                        ? _videoPlayerController.pause()
+                        : _videoPlayerController.play();
+                  });
+                },
+                child: CircleAvatar(
+                  radius: 33,
+                  backgroundColor: Colors.black38,
+                  child: Icon(
+                    _videoPlayerController.value.isPlaying
+                        ? Icons.pause
+                        : Icons.play_arrow,
+                    color: Colors.white,
+                    size: 50,
                   ),
                 ),
               ),

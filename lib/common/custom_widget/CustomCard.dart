@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:Easy/Model/ChatModel.dart';
-import 'package:Easy/Screens/IndividualPage.dart';
+import 'package:Easy/pages/chat%20pages/IndividualPage.dart';
 
 class CustomCard extends StatelessWidget {
   const CustomCard({super.key, required this.chatModel});

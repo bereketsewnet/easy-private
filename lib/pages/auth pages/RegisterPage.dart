@@ -1,20 +1,18 @@
-import 'package:Easy/CustomUi/CustomTtextFormFeild.dart';
-import 'package:Easy/Screens/RegisterScreen.dart';
-import 'package:Easy/colors.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:Easy/pages/auth%20pages/LoginPage.dart';
+import 'package:Easy/pages/auth%20pages/RegisterFromPage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../../common/custom_widget/CustomTtextFormFeild.dart';
+import '../../common/utils/colors.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -28,8 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.sizeOf(context);
-    final _formKey = GlobalKey<FormState>();
-
+    final formKey = GlobalKey<FormState>();
     return Scaffold(
       backgroundColor: Colors.white.withOpacity(0.9),
       body: Column(
@@ -55,40 +52,49 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 const SizedBox(height: 10),
                 const Text(
-                  'Login',
+                  'Register',
                   style: TextStyle(fontWeight: FontWeight.w700),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            const Icon(
-                              Icons.email,
-                              color: primary,
-                            ),
-                            CustomTextFormFeild(
-                                lable: 'Email', controller: _emailController),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        Row(
-                          children: [
-                            const Icon(
-                              Icons.password,
-                              color: primary,
-                            ),
-                            CustomTextFormFeild(
-                                lable: 'Password',
-                                controller: _passwordController),
-                          ],
-                        ),
-                        Align(
-                          alignment: Alignment.center,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.email,
+                            color: primary,
+                          ),
+                          CustomTextFormFeild(
+                              lable: 'Email', controller: _emailController),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.password,
+                            color: primary,
+                          ),
+                          CustomTextFormFeild(
+                            lable: 'Password',
+                            controller: _passwordController,
+                          ),
+                        ],
+                      ),
+                      Align(
+                        alignment: Alignment.center,
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (builder) =>
+                                    const RegisterFromPage(),
+                              ),
+                            );
+                          },
                           child: Container(
                             margin: const EdgeInsets.only(top: 25),
                             alignment: Alignment.center,
@@ -103,7 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                               child: const Center(
                                 child: Text(
-                                  'LogIn',
+                                  'Create',
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w600,
@@ -114,43 +120,43 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 10),
-                          Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text(
-                              'You haven\'t an account? ',
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            'Already you have an account? ',
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const LoginPage(),
+                                ),
+                              );
+                            },
+                            child: const Text(
+                              'Log In',
                               style: TextStyle(
-                                color: Colors.black,
+                                color: primary,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const RegisterScreen(),
-                                  ),
-                                );
-                              },
-                              child: const Text(
-                                'Sign Up',
-                                style: TextStyle(
-                                  color: primary,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            )
-                          ],
-                        )
-                      ],
-                    ),
+                          )
+                        ],
+                      )
+                    ],
                   ),
                 ),
               ],
             ),
           ),
-         const SizedBox(height: 20),
+          const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

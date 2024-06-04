@@ -1,16 +1,13 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:Easy/CustomUi/AvatarCard.dart';
-
-import '../CustomUi/ButtomCard.dart';
-import '../CustomUi/ContactCard.dart';
 import '../Model/ChatModel.dart';
+import '../common/custom_widget/AvatarCard.dart';
+import '../common/custom_widget/ContactCard.dart';
 
-class CreateGroup extends StatefulWidget {
-  const CreateGroup({super.key});
+class CreateGroupPage extends StatefulWidget {
+  const CreateGroupPage({super.key});
 
   @override
-  State<CreateGroup> createState() => _CreateGroupState();
+  State<CreateGroupPage> createState() => _CreateGroupPageState();
 }
 
 List<ChatModel> chats = [
@@ -32,7 +29,7 @@ List<ChatModel> chats = [
 ];
 List<ChatModel> groups = [];
 
-class _CreateGroupState extends State<CreateGroup> {
+class _CreateGroupPageState extends State<CreateGroupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

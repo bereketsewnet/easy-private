@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:Easy/CustomUi/CustomCard.dart';
-import 'package:Easy/Screens/SelectContact.dart';
+import 'package:Easy/pages/SelectContactPage.dart';
 
 import '../Model/ChatModel.dart';
+import '../common/custom_widget/CustomCard.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
@@ -98,7 +98,7 @@ class _ChatPageState extends State<ChatPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => SelectContact(),
+              builder: (context) => SelectContactPage(),
             ),
           );
         },

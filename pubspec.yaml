@@ -43,6 +43,7 @@ dependencies:
   video_player: ^2.8.6
   socket_io_client: ^2.0.3+1
   font_awesome_flutter: ^10.7.0
+  get: ^4.6.6
 
 dev_dependencies:
   flutter_test:

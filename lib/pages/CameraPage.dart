@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:Easy/Screens/CameraScreen.dart';
+
+import 'Screens/CameraScreen.dart';
 
 class CameraPage extends StatelessWidget {
   const CameraPage({super.key});

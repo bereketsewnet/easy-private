@@ -1,20 +1,19 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:Easy/CustomUi/ButtomCard.dart';
-import 'package:Easy/CustomUi/ContactCard.dart';
-import 'package:Easy/Screens/CreateGroup.dart';
+import 'package:Easy/pages/CreateGroupPage.dart';
 
 import '../Model/ChatModel.dart';
+import '../common/custom_widget/ButtomCard.dart';
+import '../common/custom_widget/ContactCard.dart';
 
-class SelectContact extends StatefulWidget {
-  const SelectContact({super.key});
+class SelectContactPage extends StatefulWidget {
+  const SelectContactPage({super.key});
 
   @override
-  State<SelectContact> createState() => _SelectContactState();
+  State<SelectContactPage> createState() => _SelectContactPageState();
 }
 
-class _SelectContactState extends State<SelectContact> {
+class _SelectContactPageState extends State<SelectContactPage> {
   List<ChatModel> chats = [
     ChatModel(
       name: 'Berket Sewnet',
@@ -90,34 +89,35 @@ class _SelectContactState extends State<SelectContact> {
         ],
       ),
       body: ListView.builder(
-          itemCount: chats.length + 2,
-          itemBuilder: (context, index) {
-            if (index == 0) {
-              return InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const CreateGroup(),
-                    ),
-                  );
-                },
-                child: const ButtonCard(
-                  icon: Icons.group,
-                  name: 'New group',
-                ),
-              );
-            } else if (index == 1) {
-              return const ButtonCard(
-                icon: Icons.person_add,
-                name: 'New Contact',
-              );
-            } else {
-              return ContactCard(
-                chatModel: chats[index - 2],
-              );
-            }
-          }),
+        itemCount: chats.length + 2,
+        itemBuilder: (context, index) {
+          if (index == 0) {
+            return InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CreateGroupPage(),
+                  ),
+                );
+              },
+              child: const ButtonCard(
+                icon: Icons.group,
+                name: 'New group',
+              ),
+            );
+          } else if (index == 1) {
+            return const ButtonCard(
+              icon: Icons.person_add,
+              name: 'New Contact',
+            );
+          } else {
+            return ContactCard(
+              chatModel: chats[index - 2],
+            );
+          }
+        },
+      ),
     );
   }
 }

@@ -1,12 +1,12 @@
-import 'package:Easy/Screens/RegisterFromScreen.dart';
+import 'package:Easy/pages/auth%20pages/RegisterFromPage.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:Easy/Screens/LandingScreen.dart';
-import 'package:Easy/Screens/LoginScreen.dart';
+import 'package:Easy/pages/LandingPage.dart';
+import 'package:Easy/pages/auth%20pages/LoginPage.dart';
 
-import 'Screens/RegisterScreen.dart';
-import 'colors.dart';
+import 'pages/auth pages/RegisterPage.dart';
+import 'common/utils/colors.dart';
 
 late List<CameraDescription> cameras;
 
@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
 
         ),
       ),
-      home: const RegisterScreen(),
+      home: const RegisterPage(),
     );
   }
 }

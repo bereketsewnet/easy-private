@@ -46,6 +46,7 @@ class _RegisterFromScreenState extends State<RegisterFromScreen> {
                   CircleAvatar(
                     radius: 45,
                     backgroundColor: Colors.grey,
+                    // hello
                     backgroundImage: AssetImage('assets/sample_profile.jpg'),
                   ),
                   Positioned(

@@ -1,7 +1,9 @@
 import 'package:Easy/pages/auth%20pages/RegisterPage.dart';
 import 'package:Easy/common/utils/colors.dart';
+import 'package:Easy/provider/controller/AuthController.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 
 import '../../common/custom_widget/CustomTtextFormFeild.dart';
 
@@ -27,6 +29,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     var size = MediaQuery.sizeOf(context);
     final _formKey = GlobalKey<FormState>();
+    AuthController loginController = Get.find();
 
     return Scaffold(
       backgroundColor: Colors.white.withOpacity(0.9),
@@ -58,35 +61,37 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            const Icon(
-                              Icons.email,
-                              color: primary,
-                            ),
-                            CustomTextFormFeild(
-                                lable: 'Email', controller: _emailController),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        Row(
-                          children: [
-                            const Icon(
-                              Icons.password,
-                              color: primary,
-                            ),
-                            CustomTextFormFeild(
-                                lable: 'Password',
-                                controller: _passwordController),
-                          ],
-                        ),
-                        Align(
-                          alignment: Alignment.center,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.email,
+                            color: primary,
+                          ),
+                          CustomTextFormFeild(
+                              lable: 'Email', controller: _emailController),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.password,
+                            color: primary,
+                          ),
+                          CustomTextFormFeild(
+                              lable: 'Password',
+                              controller: _passwordController),
+                        ],
+                      ),
+                      Align(
+                        alignment: Alignment.center,
+                        child: InkWell(
+                          onTap: () {
+                            loginController.loginUser(context, _emailController.text, _passwordController.text);
+                          },
                           child: Container(
                             margin: const EdgeInsets.only(top: 25),
                             alignment: Alignment.center,
@@ -112,37 +117,37 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 10),
-                          Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text(
-                              'You haven\'t an account? ',
+                      ),
+                      const SizedBox(height: 10),
+                        Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            'You haven\'t an account? ',
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const RegisterPage(),
+                                ),
+                              );
+                            },
+                            child: const Text(
+                              'Sign Up',
                               style: TextStyle(
-                                color: Colors.black,
+                                color: primary,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const RegisterPage(),
-                                  ),
-                                );
-                              },
-                              child: const Text(
-                                'Sign Up',
-                                style: TextStyle(
-                                  color: primary,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            )
-                          ],
-                        )
-                      ],
-                    ),
+                          )
+                        ],
+                      )
+                    ],
                   ),
                 ),
               ],

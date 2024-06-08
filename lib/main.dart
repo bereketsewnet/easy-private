@@ -1,11 +1,9 @@
-import 'package:Easy/pages/auth%20pages/RegisterFromPage.dart';
+import 'package:Easy/pages/auth%20pages/LoginPage.dart';
+import 'package:Easy/provider/helper/Dependency_Injection.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:Easy/pages/LandingPage.dart';
-import 'package:Easy/pages/auth%20pages/LoginPage.dart';
-
-import 'pages/auth pages/RegisterPage.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'common/utils/colors.dart';
 
 late List<CameraDescription> cameras;
@@ -21,8 +19,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
+      initialBinding: DependencyInjection(),
       theme: ThemeData(
         fontFamily: "OpenSans",
         appBarTheme: const AppBarTheme(
@@ -39,7 +38,7 @@ class MyApp extends StatelessWidget {
 
         ),
       ),
-      home: const RegisterPage(),
+      home: const LoginPage(),
     );
   }
 }

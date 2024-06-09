@@ -1,10 +1,19 @@
+import 'package:Easy/common/SnackBar/lower_snack_bar.dart';
 import 'package:Easy/common/utils/colors.dart';
+import 'package:Easy/provider/controller/AuthController.dart';
+import 'package:Easy/provider/controller/UserController.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get/get.dart';
 
 import '../../common/custom_widget/CustomTtextFormFeild.dart';
 
 class RegisterFromPage extends StatefulWidget {
-  const RegisterFromPage({super.key});
+  final String email;
+  final String password;
+
+  const RegisterFromPage(
+      {super.key, required this.email, required this.password});
 
   @override
   State<RegisterFromPage> createState() => _RegisterFromPageState();
@@ -14,7 +23,7 @@ class _RegisterFromPageState extends State<RegisterFromPage> {
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _phoneNumberController = TextEditingController();
-  String _selectedRole = 'Admin';
+  String _selectedUserType = 'Admin';
   String? _selectedGender;
 
   @override
@@ -71,10 +80,12 @@ class _RegisterFromPageState extends State<RegisterFromPage> {
                   CustomTextFormFeild(
                     lable: 'First Name',
                     controller: _firstNameController,
+                    keybordType: TextInputType.text,
                   ),
                   CustomTextFormFeild(
                     lable: 'Last Name',
                     controller: _lastNameController,
+                    keybordType: TextInputType.text,
                   ),
                 ],
               ),
@@ -84,6 +95,7 @@ class _RegisterFromPageState extends State<RegisterFromPage> {
                   CustomTextFormFeild(
                     lable: 'Phone Number',
                     controller: _phoneNumberController,
+                    keybordType: TextInputType.phone,
                   ),
                 ],
               ),
@@ -111,10 +123,10 @@ class _RegisterFromPageState extends State<RegisterFromPage> {
                   ],
                 ),
                 child: DropdownButton<String>(
-                  value: _selectedRole,
+                  value: _selectedUserType,
                   onChanged: (String? newValue) {
                     setState(() {
-                      _selectedRole = newValue!;
+                      _selectedUserType = newValue!;
                     });
                   },
                   style: const TextStyle(
@@ -194,13 +206,65 @@ class _RegisterFromPageState extends State<RegisterFromPage> {
         padding: const EdgeInsets.only(bottom: 20),
         child: FloatingActionButton(
           backgroundColor: primary,
-          onPressed: () {},
-          child: const Icon(
-            Icons.done,
-            color: Colors.white,
+          onPressed: register,
+          child: GetBuilder<UserController>(
+            builder: (controller) {
+              return controller.isLoading
+                  ? const SpinKitWanderingCubes(
+                      color: Colors.white,
+                      size: 20,
+                    )
+                  : const Icon(
+                      Icons.done,
+                      color: Colors.white,
+                    );
+            },
           ),
         ),
       ),
     );
+  }
+
+  register() {
+    String fName = _firstNameController.text;
+    String lName = _lastNameController.text;
+    String phoneNumber = _phoneNumberController.text;
+    String userType = _selectedUserType;
+    String? sex = _selectedGender;
+
+    AuthController authController = Get.find();
+    LowerSnackBar lowerSnackBar = Get.find();
+    UserController userController = Get.find();
+
+    userController.controlLoading(true);
+
+    if (fName.isEmpty) {
+      userController.controlLoading(false);
+      lowerSnackBar.warningSnackBar(context, 'Please Enter First Name');
+    } else if (lName.isEmpty) {
+      userController.controlLoading(false);
+      lowerSnackBar.warningSnackBar(context, 'Please Enter Last Name');
+    } else if (phoneNumber.isEmpty) {
+      userController.controlLoading(false);
+      lowerSnackBar.warningSnackBar(context, 'Please Enter PhoneNumber');
+    } else if (userType.isEmpty) {
+      userController.controlLoading(false);
+      lowerSnackBar.warningSnackBar(context, 'Please Choose User Type');
+    } else if (sex!.isEmpty) {
+      userController.controlLoading(false);
+      lowerSnackBar.warningSnackBar(context, 'Please Choose Gender');
+    } else {
+      authController.registerUser(
+        context,
+        _firstNameController.text,
+        _lastNameController.text,
+        widget.email,
+        widget.password,
+        _phoneNumberController.text,
+        _selectedUserType,
+        'profileUrl',
+        _selectedGender!,
+      );
+    }
   }
 }

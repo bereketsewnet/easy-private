@@ -4,8 +4,9 @@ import '../utils/colors.dart';
 
 class CustomTextFormFeild extends StatelessWidget {
   final TextEditingController? controller;
+  final TextInputType keybordType;
   final String lable;
-   const CustomTextFormFeild({super.key, required this.lable, this.controller});
+   const CustomTextFormFeild({super.key, required this.lable, this.controller, required this.keybordType});
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +17,7 @@ class CustomTextFormFeild extends StatelessWidget {
           cursorColor: primary,
           controller: controller,
           style: const TextStyle(color: primary),
+          keyboardType: keybordType,
           decoration:  InputDecoration(
             labelText: lable,
             labelStyle: const TextStyle(color: primary),

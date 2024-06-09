@@ -1,7 +1,10 @@
+import 'package:Easy/common/SnackBar/lower_snack_bar.dart';
 import 'package:Easy/pages/auth%20pages/RegisterPage.dart';
 import 'package:Easy/common/utils/colors.dart';
 import 'package:Easy/provider/controller/AuthController.dart';
+import 'package:Easy/provider/controller/UserController.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
@@ -17,6 +20,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool isLoading = false;
+
 
   @override
   void dispose() {
@@ -28,8 +33,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.sizeOf(context);
-    final _formKey = GlobalKey<FormState>();
-    AuthController loginController = Get.find();
 
     return Scaffold(
       backgroundColor: Colors.white.withOpacity(0.9),
@@ -71,7 +74,10 @@ class _LoginPageState extends State<LoginPage> {
                             color: primary,
                           ),
                           CustomTextFormFeild(
-                              lable: 'Email', controller: _emailController),
+                            lable: 'Email',
+                            controller: _emailController,
+                            keybordType: TextInputType.emailAddress,
+                          ),
                         ],
                       ),
                       const SizedBox(height: 10),
@@ -82,16 +88,16 @@ class _LoginPageState extends State<LoginPage> {
                             color: primary,
                           ),
                           CustomTextFormFeild(
-                              lable: 'Password',
-                              controller: _passwordController),
+                            lable: 'Password',
+                            controller: _passwordController,
+                            keybordType: TextInputType.visiblePassword,
+                          ),
                         ],
                       ),
                       Align(
                         alignment: Alignment.center,
                         child: InkWell(
-                          onTap: () {
-                            loginController.loginUser(context, _emailController.text, _passwordController.text);
-                          },
+                          onTap: loginUser,
                           child: Container(
                             margin: const EdgeInsets.only(top: 25),
                             alignment: Alignment.center,
@@ -104,22 +110,29 @@ class _LoginPageState extends State<LoginPage> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30),
                               ),
-                              child: const Center(
-                                child: Text(
-                                  'LogIn',
-                                  style: TextStyle(
+                              child: GetBuilder<UserController>(builder: (controller) {
+                                return Center(
+                                  child: controller.isLoading
+                                      ? const SpinKitWave(
                                     color: Colors.white,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 15,
+                                    size: 20,
+                                  )
+                                      : const Text(
+                                    'LogIn',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 15,
+                                    ),
                                   ),
-                                ),
-                              ),
+                                );
+                              },),
                             ),
                           ),
                         ),
                       ),
                       const SizedBox(height: 10),
-                        Row(
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text(
@@ -153,7 +166,7 @@ class _LoginPageState extends State<LoginPage> {
               ],
             ),
           ),
-         const SizedBox(height: 20),
+          const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -220,5 +233,31 @@ class _LoginPageState extends State<LoginPage> {
         ],
       ),
     );
+  }
+
+  loginUser() {
+
+    AuthController loginController = Get.find();
+    LowerSnackBar lowerSnackBar = Get.find();
+    UserController userController = Get.find();
+
+    userController.controlLoading(true);
+
+    String email = _emailController.text;
+    String password = _passwordController.text;
+
+    if (email.isEmpty) {
+      userController.controlLoading(false);
+      lowerSnackBar.warningSnackBar(context, 'Please enter your email');
+    } else if (password.isEmpty) {
+      userController.controlLoading(false);
+      lowerSnackBar.warningSnackBar(context, 'Please enter your password');
+    } else {
+      loginController.loginUser(
+        context,
+        email,
+        password,
+      );
+    }
   }
 }

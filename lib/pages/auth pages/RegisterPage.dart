@@ -1,7 +1,10 @@
 import 'package:Easy/pages/auth%20pages/LoginPage.dart';
 import 'package:Easy/pages/auth%20pages/RegisterFromPage.dart';
+import 'package:Easy/provider/controller/UserController.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
+import '../../common/SnackBar/lower_snack_bar.dart';
 import '../../common/custom_widget/CustomTtextFormFeild.dart';
 import '../../common/utils/colors.dart';
 
@@ -26,7 +29,6 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.sizeOf(context);
-    final formKey = GlobalKey<FormState>();
     return Scaffold(
       backgroundColor: Colors.white.withOpacity(0.9),
       body: Column(
@@ -67,7 +69,10 @@ class _RegisterPageState extends State<RegisterPage> {
                             color: primary,
                           ),
                           CustomTextFormFeild(
-                              lable: 'Email', controller: _emailController),
+                            lable: 'Email',
+                            controller: _emailController,
+                            keybordType: TextInputType.emailAddress,
+                          ),
                         ],
                       ),
                       const SizedBox(height: 10),
@@ -80,21 +85,14 @@ class _RegisterPageState extends State<RegisterPage> {
                           CustomTextFormFeild(
                             lable: 'Password',
                             controller: _passwordController,
+                            keybordType: TextInputType.visiblePassword,
                           ),
                         ],
                       ),
                       Align(
                         alignment: Alignment.center,
                         child: InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (builder) =>
-                                    const RegisterFromPage(),
-                              ),
-                            );
-                          },
+                          onTap: createEmailAndPassword,
                           child: Container(
                             margin: const EdgeInsets.only(top: 25),
                             alignment: Alignment.center,
@@ -224,4 +222,31 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
     );
   }
+
+  createEmailAndPassword() {
+    String email = _emailController.text;
+    String password = _passwordController.text;
+
+    LowerSnackBar lowerSnackBar = Get.find();
+    UserController userController = Get.find();
+
+    userController.controlLoading(true);
+
+    if (email.isEmpty) {
+      userController.controlLoading(false);
+      lowerSnackBar.warningSnackBar(context, 'Please enter your email');
+    } else if (password.isEmpty) {
+      userController.controlLoading(false);
+      lowerSnackBar.warningSnackBar(context, 'Please enter your password');
+    } else {
+      userController.controlLoading(false);
+      Get.to(
+            () => RegisterFromPage(
+          email: email,
+          password: password,
+        ),
+      );
+    }
+  }
+
 }

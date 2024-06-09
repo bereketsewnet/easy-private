@@ -2,6 +2,7 @@ import 'dart:convert';
 
 class User {
   String id, firstName, lastName, email, password, phoneNumber, userType;
+  String? profileUrl;
   List<String>? groupIds, channelIds;
 
   User({
@@ -14,6 +15,7 @@ class User {
     required this.userType,
     this.groupIds,
     this.channelIds,
+    this.profileUrl
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -24,6 +26,7 @@ class User {
       email: json['email'],
       password: json['password'],
       phoneNumber: json['phoneNumber'],
+      profileUrl: json['profileUrl'],
       userType: json['userType'],
       groupIds: json['groupId'] != null ? List<String>.from(json['groupId']) : null,
       channelIds: json['channelId'] != null ? List<String>.from(json['channelId']) : null,
@@ -38,6 +41,7 @@ class User {
       'email': email,
       'password': password,
       'phoneNumber': phoneNumber,
+      'profileUrl': profileUrl,
       'userType': userType,
       'groupId': groupIds,
       'channelId': channelIds,

@@ -1,11 +1,12 @@
+import 'package:Easy/Model/UserModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:Easy/Model/ChatModel.dart';
 
 class ContactCard extends StatelessWidget {
-  const ContactCard({super.key, required this.chatModel});
+  const ContactCard({super.key, required this.userModel});
 
-  final ChatModel chatModel;
+  final User userModel;
 
   @override
   Widget build(BuildContext context) {
@@ -13,44 +14,25 @@ class ContactCard extends StatelessWidget {
       leading: SizedBox(
         height: 50,
         width: 50,
-        child: Stack(
-          children: [
-            CircleAvatar(
-              radius: 23,
-              backgroundColor: Colors.blueGrey[200],
-              child: const Icon(
-                Icons.person,
-                color: Colors.white,
-                size: 30,
-              ),
-            ),
-            chatModel.select
-                ? const Positioned(
-                    bottom: 4,
-                    right: 5,
-                    child: CircleAvatar(
-                      radius: 11,
-                      backgroundColor: Colors.teal,
-                      child: Icon(
-                        Icons.check,
-                        color: Colors.white,
-                        size: 18,
-                      ),
-                    ),
-                  )
-                : Container(),
-          ],
+        child: CircleAvatar(
+          radius: 23,
+          backgroundColor: Colors.blueGrey[200],
+          child: const Icon(
+            Icons.person,
+            color: Colors.white,
+            size: 30,
+          ),
         ),
       ),
       title: Text(
-        chatModel.name!,
+        '${userModel.firstName} ${userModel.lastName}',
         style: const TextStyle(
           fontSize: 15,
           fontWeight: FontWeight.bold,
         ),
       ),
       subtitle: Text(
-        chatModel.status!,
+        userModel.userType,
         style: const TextStyle(fontSize: 13),
       ),
     );

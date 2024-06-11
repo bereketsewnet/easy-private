@@ -1,10 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:Easy/pages/CreateGroupPage.dart';
+import 'package:get/get.dart';
 
 import '../Model/ChatModel.dart';
+import '../Model/UserModel.dart';
 import '../common/custom_widget/ButtomCard.dart';
 import '../common/custom_widget/ContactCard.dart';
+import '../provider/controller/UserController.dart';
 
 class SelectContactPage extends StatefulWidget {
   const SelectContactPage({super.key});
@@ -31,15 +34,32 @@ class _SelectContactPageState extends State<SelectContactPage> {
     ChatModel(name: 'Selam Wale', status: 'tik tok er'),
     ChatModel(name: 'Poe', status: 'ai generate'),
   ];
+  List<User> allUsers = [];
+  
+  @override
+  void initState() {
+    getAllUsers();
+    super.initState();
+  }
+
+  void getAllUsers() async{
+    UserController userController = Get.put(UserController());
+   final users = await userController.getAllUsers(context);
+   if(users != null) {
+     setState(() {
+       allUsers = users;
+     });
+   }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Column(
+        title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               'Select Contact',
               style: TextStyle(
                 fontSize: 19,
@@ -47,8 +67,8 @@ class _SelectContactPageState extends State<SelectContactPage> {
               ),
             ),
             Text(
-              '256 contacts',
-              style: TextStyle(
+              '${allUsers.length} contacts',
+              style: const TextStyle(
                 fontSize: 13,
               ),
             ),
@@ -89,7 +109,7 @@ class _SelectContactPageState extends State<SelectContactPage> {
         ],
       ),
       body: ListView.builder(
-        itemCount: chats.length + 2,
+        itemCount: allUsers.length + 2,
         itemBuilder: (context, index) {
           if (index == 0) {
             return InkWell(
@@ -113,7 +133,7 @@ class _SelectContactPageState extends State<SelectContactPage> {
             );
           } else {
             return ContactCard(
-              chatModel: chats[index - 2],
+              userModel: allUsers[index - 2],
             );
           }
         },

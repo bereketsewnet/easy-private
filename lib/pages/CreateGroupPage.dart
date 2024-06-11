@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../Model/ChatModel.dart';
+import '../Model/UserModel.dart';
 import '../common/custom_widget/AvatarCard.dart';
 import '../common/custom_widget/ContactCard.dart';
+import '../provider/controller/UserController.dart';
 
 class CreateGroupPage extends StatefulWidget {
   const CreateGroupPage({super.key});
@@ -30,6 +33,25 @@ List<ChatModel> chats = [
 List<ChatModel> groups = [];
 
 class _CreateGroupPageState extends State<CreateGroupPage> {
+
+  List<User> allUsers = [];
+  UserController userController = Get.find();
+
+  @override
+  void initState() {
+    getAllUsers();
+    super.initState();
+  }
+
+  void getAllUsers() async{
+    final users = await userController.getAllUsers(context);
+    if(users != null) {
+      setState(() {
+        allUsers = users;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,7 +109,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                       }
                     },
                     child: ContactCard(
-                      chatModel: chats[index - 1],
+                      userModel: allUsers[index - 1],
                     ),
                   );
                 }),

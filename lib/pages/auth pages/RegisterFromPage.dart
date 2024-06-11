@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:Easy/common/SnackBar/lower_snack_bar.dart';
 import 'package:Easy/common/utils/colors.dart';
 import 'package:Easy/provider/controller/AuthController.dart';
+import 'package:Easy/provider/controller/RepositoryController.dart';
 import 'package:Easy/provider/controller/UserController.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -25,6 +28,7 @@ class _RegisterFromPageState extends State<RegisterFromPage> {
   final _phoneNumberController = TextEditingController();
   String _selectedUserType = 'Admin';
   String? _selectedGender;
+  RepositoryController repositoryController = Get.put(RepositoryController());
 
   @override
   void dispose() {
@@ -47,33 +51,45 @@ class _RegisterFromPageState extends State<RegisterFromPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                alignment: Alignment.center,
-                margin: const EdgeInsets.only(top: 35),
-                child: const Stack(
-                  children: [
-                    CircleAvatar(
-                      radius: 45,
-                      backgroundColor: Colors.grey,
-                      // hello
-                      backgroundImage: AssetImage('assets/sample_profile.jpg'),
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: CircleAvatar(
-                        backgroundColor: secondary,
-                        radius: 13,
-                        child: Icon(
-                          Icons.edit,
-                          color: Colors.white,
-                          size: 15,
+              GetBuilder<RepositoryController>(builder: (controller) {
+                return GestureDetector(
+                  onTap: () {
+                    repositoryController.selectImageFromGallery();
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    margin: const EdgeInsets.only(top: 35),
+                    child: Stack(
+                      children: [
+                        CircleAvatar(
+                          radius: 45,
+                          backgroundColor: Colors.grey,
+                          backgroundImage: repositoryController.pickedFile !=
+                                  null
+                              ? FileImage(
+                                  File(repositoryController.pickedFile!.path),
+                                )
+                              : const AssetImage('assets/sample_profile.jpg')
+                                  as ImageProvider<Object>?,
                         ),
-                      ),
+                        const Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: CircleAvatar(
+                            backgroundColor: secondary,
+                            radius: 13,
+                            child: Icon(
+                              Icons.edit,
+                              color: Colors.white,
+                              size: 15,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
+                  ),
+                );
+              }),
               const SizedBox(height: 15),
               Row(
                 children: [
@@ -230,7 +246,7 @@ class _RegisterFromPageState extends State<RegisterFromPage> {
     String lName = _lastNameController.text;
     String phoneNumber = _phoneNumberController.text;
     String userType = _selectedUserType;
-    String? sex = _selectedGender;
+    String? sex = _selectedGender ?? 'Not Insert';
 
     AuthController authController = Get.find();
     LowerSnackBar lowerSnackBar = Get.find();
@@ -240,31 +256,44 @@ class _RegisterFromPageState extends State<RegisterFromPage> {
 
     if (fName.isEmpty) {
       userController.controlLoading(false);
-      lowerSnackBar.warningSnackBar(context, 'Please Enter First Name');
+     return lowerSnackBar.warningSnackBar(context, 'Please Enter First Name');
     } else if (lName.isEmpty) {
       userController.controlLoading(false);
-      lowerSnackBar.warningSnackBar(context, 'Please Enter Last Name');
+      return lowerSnackBar.warningSnackBar(context, 'Please Enter Last Name');
     } else if (phoneNumber.isEmpty) {
       userController.controlLoading(false);
-      lowerSnackBar.warningSnackBar(context, 'Please Enter PhoneNumber');
+      return lowerSnackBar.warningSnackBar(context, 'Please Enter PhoneNumber');
     } else if (userType.isEmpty) {
       userController.controlLoading(false);
-      lowerSnackBar.warningSnackBar(context, 'Please Choose User Type');
-    } else if (sex!.isEmpty) {
+      return lowerSnackBar.warningSnackBar(context, 'Please Choose User Type');
+    } else if (sex.isEmpty) {
       userController.controlLoading(false);
-      lowerSnackBar.warningSnackBar(context, 'Please Choose Gender');
+      return lowerSnackBar.warningSnackBar(context, 'Please Choose Gender');
     } else {
-      authController.registerUser(
-        context,
-        _firstNameController.text,
-        _lastNameController.text,
-        widget.email,
-        widget.password,
-        _phoneNumberController.text,
-        _selectedUserType,
-        'profileUrl',
-        _selectedGender!,
-      );
+      if (repositoryController.pickedFile != null) {
+        authController.registerUserWithProfile(
+          context,
+          File(repositoryController.pickedFile!.path),
+          fName,
+          lName,
+          widget.email,
+          widget.password,
+          phoneNumber,
+          userType,
+          sex,
+        );
+      } else {
+        authController.registerUser(
+          context,
+          fName,
+          lName,
+          widget.email,
+          widget.password,
+          phoneNumber,
+          userType,
+          sex,
+        );
+      }
     }
   }
 }

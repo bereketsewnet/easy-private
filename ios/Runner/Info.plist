@@ -2,6 +2,21 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+<!-- Camera Permission -->
+    <key>NSCameraUsageDescription</key>
+    <string>This app requires access to your camera to capture photos and videos.</string>
+
+    <!-- Photos Permission -->
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>This app requires access to your photo library to save and share images.</string>
+
+    <!-- Contacts Permission -->
+    <key>NSContactsUsageDescription</key>
+    <string>This app requires access to your contacts to help you connect with friends and family.</string>
+
+    <!-- Microphone Permission -->
+    <key>NSMicrophoneUsageDescription</key>
+    <string>This app requires access to your microphone to allow you to record audio.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>

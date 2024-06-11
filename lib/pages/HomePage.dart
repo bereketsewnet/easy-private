@@ -1,9 +1,12 @@
+import 'package:Easy/provider/controller/AuthController.dart';
+import 'package:Easy/provider/controller/UserController.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:Easy/pages/CallHistoryPage.dart';
 import 'package:Easy/pages/CameraPage.dart';
 import 'package:Easy/pages/ChatsPage.dart';
 import 'package:Easy/pages/StatusPage.dart';
+import 'package:get/get.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,6 +18,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  AuthController authController = Get.find();
+  UserController userController = Get.find();
 
   @override
   void initState() {
@@ -26,11 +31,13 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Whatsapp Clone'),
+        title: Text(userController.currentUser.firstName),
         actions: [
           IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
           PopupMenuButton(onSelected: (value) {
-            if (kDebugMode) {
+            if(value == 'logout') {
+              authController.logOut(context);
+            }else {
               print(value);
             }
           }, itemBuilder: (context) {
@@ -54,6 +61,10 @@ class _HomePageState extends State<HomePage>
               const PopupMenuItem(
                 value: 'Settings',
                 child: Text('Settings'),
+              ),
+              const PopupMenuItem(
+                value: 'logout',
+                child: Text('Logout'),
               ),
             ];
           }),

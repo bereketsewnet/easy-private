@@ -21,13 +21,10 @@ class _HomePageState extends State<HomePage>
   late TabController _tabController;
   AuthController authController = Get.find();
   UserController userController = Get.find();
-  SocketMethods socketMethods = Get.find();
 
   @override
   void initState() {
     _tabController = TabController(length: 6, vsync: this, initialIndex: 1);
-    socketMethods.sendPrivateMessage();
-    socketMethods.personalChatCreateSuccess();
     super.initState();
   }
 

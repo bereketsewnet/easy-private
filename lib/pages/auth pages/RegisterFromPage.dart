@@ -228,7 +228,7 @@ class _RegisterFromPageState extends State<RegisterFromPage> {
               return controller.isLoading
                   ? const SpinKitWanderingCubes(
                       color: Colors.white,
-                      size: 20,
+                      size: 25,
                     )
                   : const Icon(
                       Icons.done,

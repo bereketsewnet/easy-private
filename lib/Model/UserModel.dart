@@ -1,9 +1,8 @@
-import 'dart:convert';
 
 class User {
   String id, firstName, lastName, email, password, phoneNumber, userType;
   String? profileUrl;
-  List<String>? groupIds, channelIds;
+  List<String>? privateId ,groupIds, channelIds;
   bool? select = false;
 
   User({
@@ -14,6 +13,7 @@ class User {
     required this.password,
     required this.phoneNumber,
     required this.userType,
+    this.privateId,
     this.groupIds,
     this.channelIds,
     this.profileUrl,
@@ -30,6 +30,7 @@ class User {
       phoneNumber: json['phoneNumber'],
       profileUrl: json['profileUrl'],
       userType: json['userType'],
+      privateId: json['privateId'] != null ? List<String>.from(json['privateId']) : null,
       groupIds: json['groupId'] != null ? List<String>.from(json['groupId']) : null,
       channelIds: json['channelId'] != null ? List<String>.from(json['channelId']) : null,
     );
@@ -45,21 +46,9 @@ class User {
       'phoneNumber': phoneNumber,
       'profileUrl': profileUrl,
       'userType': userType,
+      'privateId': privateId,
       'groupId': groupIds,
       'channelId': channelIds,
     };
   }
 }
-
-// {
-// "_id": "McjWApXrG4SedQWkCGRp7lk6Lgi2",
-// "fName": "fkr",
-// "lName": "abiy",
-// "email": "fkr@gmail.com",
-// "password": "65500639",
-// "phoneNumber": "0965500639",
-// "userType": "Admin",
-// "groupId": [],
-// "channelId": [],
-// "__v": 0
-// }

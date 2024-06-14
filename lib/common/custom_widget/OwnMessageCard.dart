@@ -3,8 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 
+import '../../Model/PrivateChatModel.dart';
+
 class OwnMessageCard extends StatelessWidget {
-  const OwnMessageCard({super.key});
+  const OwnMessageCard({super.key, required this.messageData});
+
+  final PrivateChatModel messageData;
 
   @override
   Widget build(BuildContext context) {
@@ -21,18 +25,18 @@ class OwnMessageCard extends StatelessWidget {
           ),
           color: const Color(0xFFDCF8C6),
           margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-          child: const Stack(
+          child: Stack(
             children: [
               Padding(
-                padding: EdgeInsets.only(
+                padding: const EdgeInsets.only(
                   left: 10,
                   right: 20,
                   top: 5,
                   bottom: 20,
                 ),
                 child: Text(
-                  'Hey Bereket',
-                  style: TextStyle(
+                  messageData.message,
+                  style: const TextStyle(
                     fontSize: 16,
                   ),
                 ),
@@ -43,15 +47,18 @@ class OwnMessageCard extends StatelessWidget {
                 child: Row(
                   children: [
                     Text(
-                      '20:11 AM',
-                      style: TextStyle(
+                      messageData.timeStamp,
+                      style: const TextStyle(
                         fontSize: 13,
                         color: Colors.grey,
                       ),
                     ),
-                    SizedBox(width: 5),
-                    Icon(
+                    const SizedBox(width: 5),
+                    messageData.isSeen ? const Icon(
                       Icons.done_all,
+                      size: 20,
+                    ): const Icon(
+                      Icons.done,
                       size: 20,
                     ),
                   ],

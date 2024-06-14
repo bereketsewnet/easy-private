@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../../Model/PrivateChatModel.dart';
+
 class ReplyCard extends StatelessWidget {
-  const ReplyCard({super.key});
+  const ReplyCard({super.key, required this.messageData});
+
+  final PrivateChatModel messageData;
 
   @override
   Widget build(BuildContext context) {
@@ -16,18 +20,18 @@ class ReplyCard extends StatelessWidget {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           // color: const Color(0xFFDCF8C6),
           margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-          child: const Stack(
+          child: Stack(
             children: [
               Padding(
-                padding: EdgeInsets.only(
+                padding: const EdgeInsets.only(
                   left: 20,
                   right: 10,
                   top: 5,
                   bottom: 20,
                 ),
                 child: Text(
-                  'Hey!, How Are you? How was the last night. I hope you get a lot of knowledge from your senior developer',
-                  style: TextStyle(
+                  messageData.message,
+                  style: const TextStyle(
                     fontSize: 16,
                   ),
                 ),
@@ -36,8 +40,8 @@ class ReplyCard extends StatelessWidget {
                 bottom: 4,
                 right: 10,
                 child: Text(
-                  '20:11 AM',
-                  style: TextStyle(
+                  messageData.timeStamp,
+                  style: const TextStyle(
                     fontSize: 13,
                     color: Colors.grey,
                   ),

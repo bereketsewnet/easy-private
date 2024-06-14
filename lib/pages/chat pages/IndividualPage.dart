@@ -1,9 +1,14 @@
+import 'package:Easy/Model/PrivateChatModel.dart';
+import 'package:Easy/provider/controller/ChatController.dart';
+import 'package:Easy/provider/controller/UserController.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:Easy/common/utils/colors.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:get/get.dart';
 import '../../Model/ChatModel.dart';
 import '../../Model/UserModel.dart';
+import '../../common/SocketConnection/SocketMethods.dart';
 import '../../common/custom_widget/OwnMessageCard.dart';
 import '../../common/custom_widget/ProfileCircle.dart';
 import '../../common/custom_widget/ReplyCard.dart';
@@ -22,6 +27,10 @@ class _IndividualPageState extends State<IndividualPage> {
   final textController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   bool showEmoji = false;
+  SocketMethods socketMethods = Get.find();
+  ChatController chatController = Get.find();
+
+
 
   // to change mic button to send button to set text
   bool sendButton = false;
@@ -30,6 +39,7 @@ class _IndividualPageState extends State<IndividualPage> {
   @override
   void initState() {
     super.initState();
+    socketMethods.sendPrivateMessageSuccess();
     focusNode.addListener(() {
       if (focusNode.hasFocus) {
         setState(() {
@@ -38,6 +48,7 @@ class _IndividualPageState extends State<IndividualPage> {
       }
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -144,30 +155,23 @@ class _IndividualPageState extends State<IndividualPage> {
               child: Column(
                 children: [
                   Expanded(
-                    child: ListView(
-                      // one message over lap to the list view when using list view builder
-                      // configure message.length + 1, and index == message.length ?
-                      // return container height 70
-                      controller: _scrollController,
-                      shrinkWrap: true,
-                      children: const [
-                        OwnMessageCard(),
-                        ReplyCard(),
-                        OwnMessageCard(),
-                        ReplyCard(),
-                        OwnMessageCard(),
-                        ReplyCard(),
-                        ReplyCard(),
-                        OwnMessageCard(),
-                        OwnMessageCard(),
-                        ReplyCard(),
-                        OwnMessageCard(),
-                        ReplyCard(),
-                        OwnMessageCard(),
-                        ReplyCard(),
-                        OwnMessageCard(),
-                        ReplyCard(),
-                      ],
+                    child: GetBuilder<ChatController>(
+                      builder: (_) {
+                        return ListView.builder(
+                          itemCount: chatController.chatMessage.length,
+                          controller: _scrollController,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            final eachMessage =
+                                chatController.chatMessage[index];
+                            if (eachMessage.sender != eachMessage.message) {
+                              return OwnMessageCard(messageData: eachMessage);
+                            } else {
+                              return ReplyCard(messageData: eachMessage);
+                            }
+                          },
+                        );
+                      },
                     ),
                   ),
                   Align(
@@ -278,6 +282,8 @@ class _IndividualPageState extends State<IndividualPage> {
                                   child: sendButton
                                       ? IconButton(
                                           onPressed: () {
+                                            // sending the message
+                                            sendMessage(textController.text);
                                             // scroll to button when sending message
                                             scrollToButton();
                                             // and return to mic button icon
@@ -453,5 +459,16 @@ class _IndividualPageState extends State<IndividualPage> {
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeOut,
     );
+  }
+
+  void sendMessage(String messageText) {
+    final message = PrivateChatModel(
+      message: messageText,
+      sender: widget.userModel.id,
+      receiver: widget.userModel.id,
+      timeStamp: '3:00 Am',
+      isSeen: false,
+    );
+    socketMethods.sendPrivateMessage(message);
   }
 }

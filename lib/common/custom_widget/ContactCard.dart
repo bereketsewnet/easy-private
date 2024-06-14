@@ -1,5 +1,6 @@
 import 'package:Easy/Model/UserModel.dart';
 import 'package:Easy/common/custom_widget/ProfileCircle.dart';
+import 'package:Easy/pages/chat%20pages/IndividualPage.dart';
 import 'package:Easy/provider/controller/UserController.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,25 +14,34 @@ class ContactCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: SizedBox(
-        height: 50,
-        width: 50,
-        child: ProfileCircle(
-          profileUrl: userModel.profileUrl,
-          radius: 23,
+    return InkWell(
+      onTap: () {
+        Get.to(
+          () => IndividualPage(
+            userModel: userModel,
+          ),
+        );
+      },
+      child: ListTile(
+        leading: SizedBox(
+          height: 50,
+          width: 50,
+          child: ProfileCircle(
+            profileUrl: userModel.profileUrl,
+            radius: 23,
+          ),
         ),
-      ),
-      title: Text(
-        '${userModel.firstName} ${userModel.lastName}',
-        style: const TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.bold,
+        title: Text(
+          '${userModel.firstName} ${userModel.lastName}',
+          style: const TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-      ),
-      subtitle: Text(
-        userModel.userType,
-        style: const TextStyle(fontSize: 13),
+        subtitle: Text(
+          userModel.userType,
+          style: const TextStyle(fontSize: 13),
+        ),
       ),
     );
   }

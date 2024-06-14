@@ -17,7 +17,7 @@ class ProfileCircle extends StatelessWidget {
       radius: radius,
       backgroundColor: Colors.transparent,
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(50),
+        borderRadius: BorderRadius.circular(0),
         child: profileUrl != null
             ? CachedNetworkImage(
           imageUrl: profileUrl!,

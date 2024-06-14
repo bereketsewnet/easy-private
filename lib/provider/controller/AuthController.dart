@@ -22,7 +22,7 @@ class AuthController extends GetxController {
       BuildContext context, String email, String password) async {
     try {
       userController.controlLoading(true);
-      final url = Uri.parse(baseUrl + 'users/login');
+      final url = Uri.parse('${baseUrl}users/login');
       final response = await http.post(
         url,
         headers: {
@@ -40,7 +40,7 @@ class AuthController extends GetxController {
         final user = User.fromJson(userData);
         userController.updateCurrentUser(user);
         userController.controlLoading(false);
-        lowerSnackBar.successSnackBar(context, 'Login Successfully!');
+        lowerSnackBar.helpSnackBar(context, 'We are happy to see you again! \n Welcome to Easy', userController.currentUser.firstName);
         Get.off(() => const HomePage());
         return;
       } else if (response.statusCode == 400) {

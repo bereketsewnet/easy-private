@@ -4,6 +4,7 @@ class User {
   String id, firstName, lastName, email, password, phoneNumber, userType;
   String? profileUrl;
   List<String>? groupIds, channelIds;
+  bool? select = false;
 
   User({
     required this.id,
@@ -15,7 +16,8 @@ class User {
     required this.userType,
     this.groupIds,
     this.channelIds,
-    this.profileUrl
+    this.profileUrl,
+    this.select,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {

@@ -1,8 +1,12 @@
+import 'package:Easy/common/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:Easy/pages/SelectContactPage.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get/get.dart';
 
 import '../Model/ChatModel.dart';
 import '../common/custom_widget/CustomCard.dart';
+import '../provider/controller/UserController.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
@@ -77,16 +81,38 @@ class _ChatPageState extends State<ChatPage> {
       currentMessage: 'ask anything you want',
     ),
   ];
+  UserController userController = Get.put(UserController());
+
+  @override
+  void initState() {
+    getAllUsers();
+    super.initState();
+  }
+
+  void getAllUsers() async {
+    await userController.getAllUsers(context);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView.builder(
-        itemCount: chats.length,
-        itemBuilder: (context, index) {
-          return CustomCard(
-            chatModel: chats[index],
-          );
+      body: GetBuilder<UserController>(
+        builder: (_) {
+          return userController.isLoading
+              ? const Center(
+                child: SpinKitCircle(
+                    color: primary,
+                    size: 50,
+                  ),
+              )
+              : ListView.builder(
+                  itemCount: userController.allUsersList.length,
+                  itemBuilder: (context, index) {
+                    return CustomCard(
+                      userModel: userController.allUsersList[index],
+                    );
+                  },
+                );
         },
       ),
       floatingActionButton: FloatingActionButton(

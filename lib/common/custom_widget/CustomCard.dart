@@ -1,11 +1,12 @@
+import 'package:Easy/Model/UserModel.dart';
 import 'package:flutter/material.dart';
 import 'package:Easy/Model/ChatModel.dart';
 import 'package:Easy/pages/chat%20pages/IndividualPage.dart';
 
 class CustomCard extends StatelessWidget {
-  const CustomCard({super.key, required this.chatModel});
+  const CustomCard({super.key, required this.userModel});
 
-  final ChatModel chatModel;
+  final User userModel;
 
   @override
   Widget build(BuildContext context) {
@@ -15,29 +16,23 @@ class CustomCard extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => IndividualPage(
-              chatModel: chatModel,
+              userModel: userModel,
             ),
           ),
         );
       },
       child: ListTile(
-        leading: CircleAvatar(
+        leading: const CircleAvatar(
           radius: 30,
           backgroundColor: Colors.blueGrey,
-          child: chatModel.isGroup!
-              ? const Icon(
-                  Icons.groups,
-                  color: Colors.white,
-                  size: 35,
-                )
-              : const Icon(
-                  Icons.person,
-                  color: Colors.white,
-                  size: 35,
-                ),
+          child: Icon(
+            Icons.person,
+            color: Colors.white,
+            size: 35,
+          ),
         ),
         title: Text(
-          chatModel.name ?? '',
+          '${userModel.firstName}  ${userModel.lastName}',
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
@@ -48,15 +43,15 @@ class CustomCard extends StatelessWidget {
             const Icon(Icons.done_all),
             const SizedBox(width: 3),
             Text(
-              chatModel.currentMessage ?? '',
+              userModel.userType,
               style: const TextStyle(
                 fontSize: 13,
               ),
             ),
           ],
         ),
-        trailing: Text(
-          chatModel.time ?? '',
+        trailing: const Text(
+          '11:02',
         ),
       ),
     );

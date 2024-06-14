@@ -69,7 +69,7 @@ class _RegisterFromPageState extends State<RegisterFromPage> {
                               ? FileImage(
                                   File(repositoryController.pickedFile!.path),
                                 )
-                              : const AssetImage('assets/sample_profile.jpg')
+                              : const AssetImage('assets/male_profile.png')
                                   as ImageProvider<Object>?,
                         ),
                         const Positioned(

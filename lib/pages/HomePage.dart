@@ -1,6 +1,7 @@
+import 'package:Easy/common/SocketConnection/SocketMethods.dart';
+import 'package:Easy/common/custom_widget/ProfileCircle.dart';
 import 'package:Easy/provider/controller/AuthController.dart';
 import 'package:Easy/provider/controller/UserController.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:Easy/pages/CallHistoryPage.dart';
 import 'package:Easy/pages/CameraPage.dart';
@@ -20,24 +21,44 @@ class _HomePageState extends State<HomePage>
   late TabController _tabController;
   AuthController authController = Get.find();
   UserController userController = Get.find();
+  SocketMethods socketMethods = Get.find();
 
   @override
   void initState() {
-    _tabController = TabController(length: 4, vsync: this, initialIndex: 1);
+    _tabController = TabController(length: 6, vsync: this, initialIndex: 1);
+    socketMethods.sendPrivateMessage();
+    socketMethods.personalChatCreateSuccess();
     super.initState();
   }
+
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leadingWidth: 105,
+        titleSpacing: 0,
+        leading: Row(
+          children: [
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.menu_rounded),
+            ),
+            ProfileCircle(
+              profileUrl: userController.currentUser.profileUrl,
+              radius: 25,
+            ),
+            // CircleProfile(),
+          ],
+        ),
         title: Text(userController.currentUser.firstName),
         actions: [
           IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
           PopupMenuButton(onSelected: (value) {
-            if(value == 'logout') {
+            if (value == 'logout') {
               authController.logOut(context);
-            }else {
+            } else {
               print(value);
             }
           }, itemBuilder: (context) {
@@ -70,9 +91,11 @@ class _HomePageState extends State<HomePage>
           }),
         ],
         bottom: TabBar(
+          isScrollable: true,
           controller: _tabController,
           indicatorColor: Colors.white,
           dividerColor: Colors.transparent,
+          tabAlignment: TabAlignment.start,
           tabs: const [
             Tab(
               icon: Icon(
@@ -83,6 +106,18 @@ class _HomePageState extends State<HomePage>
             Tab(
               child: Text(
                 'CHATS',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            Tab(
+              child: Text(
+                'GROUP',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            Tab(
+              child: Text(
+                'CHANNEL',
                 style: TextStyle(color: Colors.white),
               ),
             ),
@@ -106,6 +141,8 @@ class _HomePageState extends State<HomePage>
         children: const [
           CameraPage(),
           ChatPage(),
+          Text('GROUP CHAT'),
+          Text('CHANNEL CHAT'),
           StatusPage(),
           CallHistoryPage(),
         ],

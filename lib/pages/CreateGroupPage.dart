@@ -33,8 +33,6 @@ List<ChatModel> chats = [
 List<ChatModel> groups = [];
 
 class _CreateGroupPageState extends State<CreateGroupPage> {
-
-  List<User> allUsers = [];
   UserController userController = Get.find();
 
   @override
@@ -43,13 +41,8 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
     super.initState();
   }
 
-  void getAllUsers() async{
-    final users = await userController.getAllUsers(context);
-    if(users != null) {
-      setState(() {
-        allUsers = users;
-      });
-    }
+  void getAllUsers() async {
+    await userController.getAllUsers(context);
   }
 
   @override
@@ -94,24 +87,23 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                       height: groups.length > 0 ? 90 : 10,
                     );
                   }
-                  return InkWell(
-                    onTap: () {
-                      if (chats[index - 1].select == false) {
-                        setState(() {
-                          chats[index - 1].select = true;
-                          groups.add(chats[index - 1]);
-                        });
-                      } else {
-                        setState(() {
-                          chats[index - 1].select = false;
-                          groups.remove(chats[index - 1]);
-                        });
-                      }
-                    },
-                    child: ContactCard(
-                      userModel: allUsers[index - 1],
-                    ),
-                  );
+                  return InkWell(onTap: () {
+                    if (chats[index - 1].select == false) {
+                      setState(() {
+                        chats[index - 1].select = true;
+                        groups.add(chats[index - 1]);
+                      });
+                    } else {
+                      setState(() {
+                        chats[index - 1].select = false;
+                        groups.remove(chats[index - 1]);
+                      });
+                    }
+                  }, child: GetBuilder(builder: (_) {
+                    return ContactCard(
+                      userModel: userController.allUsersList[index - 1],
+                    );
+                  }));
                 }),
             groups.isNotEmpty
                 ? Column(

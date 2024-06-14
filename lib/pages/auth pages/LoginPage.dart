@@ -22,7 +22,6 @@ class _LoginPageState extends State<LoginPage> {
   final _passwordController = TextEditingController();
   bool isLoading = false;
 
-
   @override
   void dispose() {
     super.dispose();
@@ -110,23 +109,25 @@ class _LoginPageState extends State<LoginPage> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30),
                               ),
-                              child: GetBuilder<UserController>(builder: (controller) {
-                                return Center(
-                                  child: controller.isLoading
-                                      ? const SpinKitWave(
-                                    color: Colors.white,
-                                    size: 20,
-                                  )
-                                      : const Text(
-                                    'LogIn',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                );
-                              },),
+                              child: GetBuilder<UserController>(
+                                builder: (controller) {
+                                  return Center(
+                                    child: controller.isLoading
+                                        ? const SpinKitWave(
+                                            color: Colors.white,
+                                            size: 20,
+                                          )
+                                        : const Text(
+                                            'LogIn',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 15,
+                                            ),
+                                          ),
+                                  );
+                                },
+                              ),
                             ),
                           ),
                         ),
@@ -236,7 +237,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   loginUser() {
-
     AuthController loginController = Get.find();
     LowerSnackBar lowerSnackBar = Get.find();
     UserController userController = Get.find();

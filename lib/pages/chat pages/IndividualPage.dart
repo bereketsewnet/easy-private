@@ -3,14 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:Easy/common/utils/colors.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import '../../Model/ChatModel.dart';
+import '../../Model/UserModel.dart';
 import '../../common/custom_widget/OwnMessageCard.dart';
+import '../../common/custom_widget/ProfileCircle.dart';
 import '../../common/custom_widget/ReplyCard.dart';
 import '../Screens/CameraScreen.dart';
 
 class IndividualPage extends StatefulWidget {
-  const IndividualPage({super.key, required this.chatModel});
+  const IndividualPage({super.key, required this.userModel});
 
-  final ChatModel chatModel;
+  final User userModel;
 
   @override
   State<IndividualPage> createState() => _IndividualPageState();
@@ -64,15 +66,10 @@ class _IndividualPageState extends State<IndividualPage> {
                     size: 24,
                   ),
                   const SizedBox(width: 2),
-                  CircleAvatar(
+                  ProfileCircle(
+                    profileUrl: widget.userModel.profileUrl,
                     radius: 20,
-                    backgroundColor: Colors.blueGrey,
-                    child: Icon(
-                      widget.chatModel.isGroup! ? Icons.groups : Icons.person,
-                      color: Colors.white,
-                      size: 25,
-                    ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -82,7 +79,7 @@ class _IndividualPageState extends State<IndividualPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.chatModel.name!,
+                    '${widget.userModel.firstName}  ${widget.userModel.lastName}',
                     style: const TextStyle(
                       fontSize: 18.5,
                       fontWeight: FontWeight.bold,

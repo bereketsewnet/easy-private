@@ -11,10 +11,13 @@ import 'package:http/http.dart' as http;
 class UserController extends GetxController {
   late User _currentUser;
   bool _isLoading = false;
+  List<User> _allUsersList = [];
 
   User get currentUser => _currentUser;
 
   bool get isLoading => _isLoading;
+
+  List<User> get allUsersList => _allUsersList;
 
   void updateCurrentUser(User user) {
     _currentUser = user;
@@ -25,7 +28,7 @@ class UserController extends GetxController {
     update();
   }
 
-  Future<List<User>?> getAllUsers(BuildContext context) async {
+  Future<void> getAllUsers(BuildContext context) async {
     LowerSnackBar lowerSnackBar = Get.find();
     UserController userController = Get.find();
     userController.controlLoading(true);
@@ -36,18 +39,20 @@ class UserController extends GetxController {
       if(response.statusCode == 200) {
         userController.controlLoading(false);
         final List<dynamic> jsonData = jsonDecode(response.body);
-        return jsonData.map((json) => User.fromJson(json)).toList();
-      }else {
+        _allUsersList = jsonData.map((json) => User.fromJson(json)).toList();
+        update();
         userController.controlLoading(false);
+        return;
+      }else {
         final errorJson = jsonDecode(response.body);
         final errorObject = ErrorMessage.fromJson(errorJson);
+        userController.controlLoading(false);
         lowerSnackBar.failureSnackBar(context, errorObject.message);
-        return null;
+        return;
       }
     } catch (e) {
       userController.controlLoading(false);
       lowerSnackBar.failureSnackBar(context, e.toString());
     }
-    return null;
   }
 }

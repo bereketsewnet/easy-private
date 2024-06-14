@@ -42,13 +42,16 @@ class LowerSnackBar {
   }
 
 // Help snackBar
-  void helpSnackBar(BuildContext context, String message) {
+  void helpSnackBar(BuildContext context, String message, String name) {
+    if(name == ''){
+      name = 'There!';
+    }
     final snackBar = SnackBar(
       elevation: 0,
       behavior: SnackBarBehavior.floating,
       backgroundColor: Colors.transparent,
       content: AwesomeSnackbarContent(
-        title: 'Hi There!',
+        title: 'Hi $name',
         message: message,
         contentType: ContentType.help,
       ),

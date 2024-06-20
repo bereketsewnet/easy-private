@@ -16,7 +16,7 @@ class DependencyInjection implements Bindings {
 
     // inject Controller
     Get.lazyPut(() => AuthController());
-    Get.lazyPut(() => UserController());
+    // Get.lazyPut(() => UserController());
     Get.lazyPut(() => SocketMethods());
 
     // inject Class

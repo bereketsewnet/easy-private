@@ -27,4 +27,10 @@ class RepositoryController extends GetxController {
     }
   }
 
+// generate roomId
+  String generateRoomId(String senderId, String receiverId) {
+    List<String> ids = [senderId, receiverId];
+    ids.sort();
+    return ids.join('_');
+  }
 }

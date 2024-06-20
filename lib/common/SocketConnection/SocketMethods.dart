@@ -22,7 +22,7 @@ class SocketMethods extends GetxController {
     _socketClient.on('sendPrivateMessageSuccess', (message) {
       final messageData = PrivateChatModel.fromJson(message);
       chatController.updatePrivateChatMessage(messageData);
-      print(messageData);
+      print(messageData.timeStamp);
     });
   }
 }

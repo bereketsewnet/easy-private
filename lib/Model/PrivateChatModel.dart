@@ -1,4 +1,5 @@
 class PrivateChatModel {
+  final String? messageId;
   final String message;
   final String sender;
   final String receiver;
@@ -7,8 +8,8 @@ class PrivateChatModel {
   final String messageType;
   final String? replayMessage;
 
-
   PrivateChatModel({
+    this.messageId,
     required this.message,
     required this.sender,
     required this.receiver,
@@ -20,6 +21,7 @@ class PrivateChatModel {
 
   Map<String, dynamic> toJson() {
     return {
+      'messageId': messageId,
       'message': message,
       'sender': sender,
       'receiver': receiver,
@@ -32,6 +34,7 @@ class PrivateChatModel {
 
   factory PrivateChatModel.fromJson(Map<String, dynamic> json) {
     return PrivateChatModel(
+      messageId: json['messageId'],
       message: json['message'],
       sender: json['sender'],
       receiver: json['receiver'],

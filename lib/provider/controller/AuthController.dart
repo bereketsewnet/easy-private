@@ -40,7 +40,7 @@ class AuthController extends GetxController {
         final user = User.fromJson(userData);
         userController.updateCurrentUser(user);
         userController.controlLoading(false);
-        lowerSnackBar.helpSnackBar(context, 'We are happy to see you again! \n Welcome to Easy', userController.currentUser.firstName);
+        lowerSnackBar.helpSnackBar(context, 'We are happy to see you again! \n Welcome to Easy', userController.currentUser!.firstName);
         Get.off(() => const HomePage());
         return;
       } else if (response.statusCode == 400) {

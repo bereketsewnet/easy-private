@@ -29,6 +29,7 @@ class _RegisterFromPageState extends State<RegisterFromPage> {
   String _selectedUserType = 'Admin';
   String? _selectedGender;
   RepositoryController repositoryController = Get.put(RepositoryController());
+  UserController userController = Get.put(UserController());
 
   @override
   void dispose() {
@@ -250,7 +251,7 @@ class _RegisterFromPageState extends State<RegisterFromPage> {
 
     AuthController authController = Get.find();
     LowerSnackBar lowerSnackBar = Get.find();
-    UserController userController = Get.find();
+
 
     userController.controlLoading(true);
 

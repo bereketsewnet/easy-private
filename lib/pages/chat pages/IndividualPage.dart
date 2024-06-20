@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:Easy/common/utils/colors.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:get/get.dart';
-import '../../Model/ChatModel.dart';
 import '../../Model/UserModel.dart';
 import '../../common/SocketConnection/SocketMethods.dart';
 import '../../common/custom_widget/OwnMessageCard.dart';
@@ -29,8 +28,7 @@ class _IndividualPageState extends State<IndividualPage> {
   bool showEmoji = false;
   SocketMethods socketMethods = Get.find();
   ChatController chatController = Get.find();
-
-
+  UserController controllerr = Get.find();
 
   // to change mic button to send button to set text
   bool sendButton = false;
@@ -40,6 +38,7 @@ class _IndividualPageState extends State<IndividualPage> {
   void initState() {
     super.initState();
     socketMethods.sendPrivateMessageSuccess();
+    getAllMessageList();
     focusNode.addListener(() {
       if (focusNode.hasFocus) {
         setState(() {
@@ -48,7 +47,6 @@ class _IndividualPageState extends State<IndividualPage> {
       }
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -164,7 +162,7 @@ class _IndividualPageState extends State<IndividualPage> {
                           itemBuilder: (context, index) {
                             final eachMessage =
                                 chatController.chatMessage[index];
-                            if (eachMessage.sender != eachMessage.message) {
+                            if (eachMessage.sender == controllerr.currentUser!.id) {
                               return OwnMessageCard(messageData: eachMessage);
                             } else {
                               return ReplyCard(messageData: eachMessage);
@@ -249,6 +247,7 @@ class _IndividualPageState extends State<IndividualPage> {
                                           ),
                                           IconButton(
                                             onPressed: () {
+                                              getAllMessageList();
                                               Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
@@ -464,11 +463,19 @@ class _IndividualPageState extends State<IndividualPage> {
   void sendMessage(String messageText) {
     final message = PrivateChatModel(
       message: messageText,
-      sender: widget.userModel.id,
+      sender: controllerr.currentUser!.id,
       receiver: widget.userModel.id,
       timeStamp: '3:00 Am',
       isSeen: false,
     );
     socketMethods.sendPrivateMessage(message);
+  }
+
+  Future<void> getAllMessageList() async {
+    chatController.getAllPrivateChatMessage(
+      context,
+      controllerr.currentUser!.id,
+      widget.userModel.id,
+    );
   }
 }

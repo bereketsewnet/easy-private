@@ -1,3 +1,4 @@
+import 'package:Easy/common/SnackBar/lower_snack_bar.dart';
 import 'package:Easy/common/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:Easy/pages/SelectContactPage.dart';
@@ -5,6 +6,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 
 import '../Model/ChatModel.dart';
+import '../Model/UserModel.dart';
 import '../common/custom_widget/CustomCard.dart';
 import '../provider/controller/UserController.dart';
 
@@ -82,6 +84,7 @@ class _ChatPageState extends State<ChatPage> {
     ),
   ];
   UserController userController = Get.put(UserController());
+  LowerSnackBar lowerSnackBar = Get.find();
 
   @override
   void initState() {
@@ -91,6 +94,7 @@ class _ChatPageState extends State<ChatPage> {
 
   void getAllUsers() async {
     await userController.getAllUsers(context);
+    print(userController.currentUser!.id);
   }
 
   @override
@@ -98,21 +102,31 @@ class _ChatPageState extends State<ChatPage> {
     return Scaffold(
       body: GetBuilder<UserController>(
         builder: (_) {
-          return userController.isLoading
-              ? const Center(
-                child: SpinKitCircle(
+          return FutureBuilder<List<User>>(
+              future: userController.getAllUsers(context),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  final users = snapshot.data;
+                  return ListView.builder(
+                    itemCount: users!.length,
+                    itemBuilder: (context, index) {
+                      return CustomCard(
+                        userModel: users[index],
+                      );
+                    },
+                  );
+                } else if (snapshot.hasError) {
+                  return const SpinKitCircle(
                     color: primary,
                     size: 50,
-                  ),
-              )
-              : ListView.builder(
-                  itemCount: userController.allUsersList.length,
-                  itemBuilder: (context, index) {
-                    return CustomCard(
-                      userModel: userController.allUsersList[index],
-                    );
-                  },
-                );
+                  );
+                } else {
+                  return const SpinKitCircle(
+                    color: primary,
+                    size: 50,
+                  );
+                }
+              });
         },
       ),
       floatingActionButton: FloatingActionButton(
@@ -132,3 +146,12 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 }
+
+// ListView.builder(
+// itemCount: userController.allUsersList.length,
+// itemBuilder: (context, index) {
+// return CustomCard(
+// userModel: userController.allUsersList[index],
+// );
+// },
+// );

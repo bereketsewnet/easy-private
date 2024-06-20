@@ -24,8 +24,8 @@ class ReplyCard extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.only(
-                  left: 20,
-                  right: 10,
+                  left: 10,
+                  right: 60,
                   top: 5,
                   bottom: 20,
                 ),

@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leadingWidth: 105,
+        leadingWidth: 95,
         titleSpacing: 0,
         leading: Row(
           children: [
@@ -43,13 +43,13 @@ class _HomePageState extends State<HomePage>
               icon: const Icon(Icons.menu_rounded),
             ),
             ProfileCircle(
-              profileUrl: userController.currentUser.profileUrl,
-              radius: 25,
+              profileUrl: userController.currentUser!.profileUrl,
+              radius: 20,
             ),
             // CircleProfile(),
           ],
         ),
-        title: Text(userController.currentUser.firstName),
+        title: Text(userController.currentUser!.firstName),
         actions: [
           IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
           PopupMenuButton(onSelected: (value) {

@@ -9,11 +9,11 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class UserController extends GetxController {
-  late User _currentUser;
+  User? _currentUser;
   bool _isLoading = false;
   List<User> _allUsersList = [];
 
-  User get currentUser => _currentUser;
+  User? get currentUser => _currentUser;
 
   bool get isLoading => _isLoading;
 
@@ -28,31 +28,37 @@ class UserController extends GetxController {
     update();
   }
 
-  Future<void> getAllUsers(BuildContext context) async {
+  Future<List<User>> getAllUsers(BuildContext context) async {
     LowerSnackBar lowerSnackBar = Get.find();
     UserController userController = Get.find();
     userController.controlLoading(true);
     try {
-      final url = Uri.parse(baseUrl+'users');
+      final url = Uri.parse(baseUrl + 'users');
       final response = await http.get(url);
 
-      if(response.statusCode == 200) {
+      if (response.statusCode == 200) {
         userController.controlLoading(false);
         final List<dynamic> jsonData = jsonDecode(response.body);
         _allUsersList = jsonData.map((json) => User.fromJson(json)).toList();
+        // Filter out the user with my ID
+        _allUsersList = _allUsersList
+            .where((user) => user.id != userController.currentUser!.id)
+            .toList();
         update();
         userController.controlLoading(false);
-        return;
-      }else {
+        return _allUsersList = _allUsersList
+            .where((user) => user.id != userController.currentUser!.id)
+            .toList();
+      } else {
         final errorJson = jsonDecode(response.body);
         final errorObject = ErrorMessage.fromJson(errorJson);
         userController.controlLoading(false);
         lowerSnackBar.failureSnackBar(context, errorObject.message);
-        return;
       }
     } catch (e) {
       userController.controlLoading(false);
       lowerSnackBar.failureSnackBar(context, e.toString());
     }
+    return [];
   }
 }

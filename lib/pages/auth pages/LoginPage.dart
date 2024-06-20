@@ -21,6 +21,7 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool isLoading = false;
+  UserController userController = Get.put(UserController());
 
   @override
   void dispose() {
@@ -53,7 +54,6 @@ class _LoginPageState extends State<LoginPage> {
               ],
             ),
             child: Column(
-              // mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(height: 10),
@@ -239,7 +239,6 @@ class _LoginPageState extends State<LoginPage> {
   loginUser() {
     AuthController loginController = Get.find();
     LowerSnackBar lowerSnackBar = Get.find();
-    UserController userController = Get.find();
 
     userController.controlLoading(true);
 

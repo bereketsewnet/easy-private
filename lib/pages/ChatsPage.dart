@@ -94,7 +94,6 @@ class _ChatPageState extends State<ChatPage> {
 
   void getAllUsers() async {
     await userController.getAllUsers(context);
-    print(userController.currentUser!.id);
   }
 
   @override
@@ -116,10 +115,7 @@ class _ChatPageState extends State<ChatPage> {
                     },
                   );
                 } else if (snapshot.hasError) {
-                  return const SpinKitCircle(
-                    color: primary,
-                    size: 50,
-                  );
+                  return const Center(child: Text('Text'));
                 } else {
                   return const SpinKitCircle(
                     color: primary,
@@ -138,7 +134,7 @@ class _ChatPageState extends State<ChatPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => SelectContactPage(),
+              builder: (context) => const SelectContactPage(),
             ),
           );
         },
@@ -146,12 +142,3 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 }
-
-// ListView.builder(
-// itemCount: userController.allUsersList.length,
-// itemBuilder: (context, index) {
-// return CustomCard(
-// userModel: userController.allUsersList[index],
-// );
-// },
-// );

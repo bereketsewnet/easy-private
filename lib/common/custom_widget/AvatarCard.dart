@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:Easy/Model/ChatModel.dart';
 
+import '../../Model/UserModel.dart';
+
 class AvatarCard extends StatelessWidget {
   const AvatarCard({super.key, required this.contact});
-  final ChatModel contact;
+  final User contact;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +42,7 @@ class AvatarCard extends StatelessWidget {
           ),
          const SizedBox(height: 2),
           Text(
-            contact.name!,
+            contact.firstName,
             style: const TextStyle(fontSize: 12),
           ),
         ],

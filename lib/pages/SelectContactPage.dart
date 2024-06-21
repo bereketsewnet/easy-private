@@ -5,6 +5,7 @@ import 'package:Easy/pages/CreateGroupPage.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import '../Model/ChatModel.dart';
+import '../Model/UserModel.dart';
 import '../common/custom_widget/ButtomCard.dart';
 import '../common/custom_widget/ContactCard.dart';
 import '../provider/controller/UserController.dart';
@@ -127,14 +128,31 @@ class _SelectContactPageState extends State<SelectContactPage> {
                 name: 'New Contact',
               );
             } else {
-              return userController.isLoading
-                  ? const SpinKitCircle(
-                      color: primary,
-                      size: 20,
-                    )
-                  : ContactCard(
-                      userModel: userController.allUsersList[index - 2],
-                    );
+              return FutureBuilder<List<User>>(
+                  future: userController.getAllUsers(context),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      final users = snapshot.data;
+                      return SizedBox(
+                        height: 900,
+                        child: ListView.builder(
+                          itemCount: users!.length,
+                          itemBuilder: (context, index) {
+                            return ContactCard(
+                              userModel: users[index],
+                            );
+                          },
+                        ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return const Center(child: Text('Text'));
+                    } else {
+                      return const SpinKitCircle(
+                        color: primary,
+                        size: 50,
+                      );
+                    }
+                  });
             }
           },
         ),

@@ -3,7 +3,7 @@ class User {
   String id, firstName, lastName, email, password, phoneNumber, userType;
   String? profileUrl;
   List<String>? privateId ,groupIds, channelIds;
-  bool? select = false;
+  bool select = false;
 
   User({
     required this.id,
@@ -17,7 +17,7 @@ class User {
     this.groupIds,
     this.channelIds,
     this.profileUrl,
-    this.select,
+    this.select = false,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {

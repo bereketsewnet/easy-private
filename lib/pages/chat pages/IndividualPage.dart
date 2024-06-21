@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:Easy/common/utils/colors.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import '../../Model/UserModel.dart';
 import '../../common/SocketConnection/SocketMethods.dart';
@@ -155,17 +156,43 @@ class _IndividualPageState extends State<IndividualPage> {
                   Expanded(
                     child: GetBuilder<ChatController>(
                       builder: (_) {
-                        return ListView.builder(
-                          itemCount: chatController.chatMessage.length,
-                          controller: _scrollController,
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            final eachMessage =
-                                chatController.chatMessage[index];
-                            if (eachMessage.sender == controllerr.currentUser!.id) {
-                              return OwnMessageCard(messageData: eachMessage);
+                        return FutureBuilder<List<PrivateChatModel>>(
+                          future: chatController.getAllPrivateChatMessage(
+                            context,
+                            controllerr.currentUser!.id,
+                            widget.userModel.id,
+                          ),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              final messages = snapshot.data;
+                              return ListView.builder(
+                                itemCount: chatController.chatMessage.length,
+                                controller: _scrollController,
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) {
+                                  final eachMessage =
+                                      chatController.chatMessage[index];
+                                  if (eachMessage.sender ==
+                                      controllerr.currentUser!.id) {
+                                    return OwnMessageCard(
+                                      messageData: eachMessage,
+                                    );
+                                  } else {
+                                    return ReplyCard(
+                                      messageData: eachMessage,
+                                    );
+                                  }
+                                },
+                              );
+                            } else if (snapshot.hasError) {
+                              return const Center(
+                                child: Text('Error'),
+                              );
                             } else {
-                              return ReplyCard(messageData: eachMessage);
+                              return const SpinKitDualRing(
+                                color: primary,
+                                size: 30,
+                              );
                             }
                           },
                         );
@@ -174,143 +201,140 @@ class _IndividualPageState extends State<IndividualPage> {
                   ),
                   Align(
                     alignment: Alignment.bottomCenter,
-                    child: SizedBox(
-                      height: 70,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Row(
-                            children: [
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width - 60,
-                                child: Card(
-                                  margin: const EdgeInsets.only(
-                                    left: 2,
-                                    right: 2,
-                                    bottom: 9,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(25),
-                                  ),
-                                  child: TextFormField(
-                                    controller: textController,
-                                    focusNode: focusNode,
-                                    textAlignVertical: TextAlignVertical.center,
-                                    keyboardType: TextInputType.multiline,
-                                    maxLines: 5,
-                                    minLines: 1,
-                                    onChanged: (value) {
-                                      if (value.isNotEmpty) {
-                                        setState(() {
-                                          sendButton = true;
-                                        });
-                                      } else {
-                                        setState(() {
-                                          sendButton = false;
-                                        });
-                                      }
-                                    },
-                                    decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      prefixIcon: IconButton(
-                                        onPressed: () {
-                                          setState(() {
-                                            focusNode.unfocus();
-                                            focusNode.canRequestFocus = false;
-                                            showEmoji = !showEmoji;
-                                          });
-                                        },
-                                        icon: Icon(
-                                          showEmoji
-                                              ? Icons.keyboard_double_arrow_down
-                                              : Icons.emoji_emotions,
-                                          color: secondary,
-                                        ),
-                                      ),
-                                      suffixIcon: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          IconButton(
-                                            onPressed: () {
-                                              showModalBottomSheet(
-                                                backgroundColor:
-                                                    Colors.transparent,
-                                                context: context,
-                                                builder: (builder) =>
-                                                    bottomSheet(),
-                                              );
-                                            },
-                                            icon: const Icon(
-                                              Icons.attach_file,
-                                              color: secondary,
-                                            ),
-                                          ),
-                                          IconButton(
-                                            onPressed: () {
-                                              getAllMessageList();
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (builder) =>
-                                                      const CameraScreen(),
-                                                ),
-                                              );
-                                            },
-                                            icon: const Icon(
-                                              Icons.camera_alt,
-                                              color: secondary,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      hintText: 'Type a message',
-                                      contentPadding: const EdgeInsets.all(5),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width - 60,
+                              child: Card(
+                                margin: const EdgeInsets.only(
                                   left: 2,
-                                  right: 5,
+                                  right: 2,
                                   bottom: 9,
                                 ),
-                                child: CircleAvatar(
-                                  radius: 24,
-                                  backgroundColor: primary,
-                                  child: sendButton
-                                      ? IconButton(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                child: TextFormField(
+                                  controller: textController,
+                                  focusNode: focusNode,
+                                  textAlignVertical: TextAlignVertical.center,
+                                  keyboardType: TextInputType.multiline,
+                                  maxLines: 5,
+                                  minLines: 1,
+                                  onChanged: (value) {
+                                    if (value.isNotEmpty) {
+                                      setState(() {
+                                        sendButton = true;
+                                      });
+                                    } else {
+                                      setState(() {
+                                        sendButton = false;
+                                      });
+                                    }
+                                  },
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    prefixIcon: IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          focusNode.unfocus();
+                                          focusNode.canRequestFocus = false;
+                                          showEmoji = !showEmoji;
+                                        });
+                                      },
+                                      icon: Icon(
+                                        showEmoji
+                                            ? Icons.keyboard_double_arrow_down
+                                            : Icons.emoji_emotions,
+                                        color: secondary,
+                                      ),
+                                    ),
+                                    suffixIcon: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        IconButton(
                                           onPressed: () {
-                                            // sending the message
-                                            sendMessage(textController.text);
-                                            // scroll to button when sending message
-                                            scrollToButton();
-                                            // and return to mic button icon
-                                            setState(() {
-                                              sendButton = false;
-                                            });
-                                            // clearing textFild
-                                            textController.clear();
+                                            showModalBottomSheet(
+                                              backgroundColor:
+                                                  Colors.transparent,
+                                              context: context,
+                                              builder: (builder) =>
+                                                  bottomSheet(),
+                                            );
                                           },
                                           icon: const Icon(
-                                            Icons.send,
-                                            color: Colors.white,
-                                          ),
-                                        )
-                                      : IconButton(
-                                          onPressed: () {},
-                                          icon: const Icon(
-                                            Icons.mic,
-                                            color: Colors.white,
+                                            Icons.attach_file,
+                                            color: secondary,
                                           ),
                                         ),
+                                        IconButton(
+                                          onPressed: () {
+                                            getAllMessageList();
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (builder) =>
+                                                    const CameraScreen(),
+                                              ),
+                                            );
+                                          },
+                                          icon: const Icon(
+                                            Icons.camera_alt,
+                                            color: secondary,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    hintText: 'Type a message',
+                                    contentPadding: const EdgeInsets.all(5),
+                                  ),
                                 ),
                               ),
-                            ],
-                          ),
-                          showEmoji ? emojiSelect() : Container(),
-                        ],
-                      ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                left: 2,
+                                right: 5,
+                                bottom: 9,
+                              ),
+                              child: CircleAvatar(
+                                radius: 24,
+                                backgroundColor: primary,
+                                child: sendButton
+                                    ? IconButton(
+                                        onPressed: () {
+                                          // sending the message
+                                          sendMessage(textController.text);
+                                          // scroll to button when sending message
+                                          scrollToButton();
+                                          // and return to mic button icon
+                                          setState(() {
+                                            sendButton = false;
+                                          });
+                                          // clearing textFild
+                                          textController.clear();
+                                        },
+                                        icon: const Icon(
+                                          Icons.send,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    : IconButton(
+                                        onPressed: () {},
+                                        icon: const Icon(
+                                          Icons.mic,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        showEmoji ? emojiSelect() : Container(),
+                      ],
                     ),
                   ),
                 ],
@@ -435,20 +459,22 @@ class _IndividualPageState extends State<IndividualPage> {
   }
 
   Widget emojiSelect() {
-    return EmojiPicker(
-      textEditingController: textController,
-      onEmojiSelected: (category, emoji) {
-        String value = textController.toString().trim();
-        if (value.isNotEmpty) {
-          setState(() {
-            sendButton = true;
-          });
-        } else {
-          setState(() {
-            sendButton = false;
-          });
-        }
-      },
+    return Container(
+      child: EmojiPicker(
+        textEditingController: textController,
+        onEmojiSelected: (category, emoji) {
+          String value = textController.toString().trim();
+          if (value.isNotEmpty) {
+            setState(() {
+              sendButton = true;
+            });
+          } else {
+            setState(() {
+              sendButton = false;
+            });
+          }
+        },
+      ),
     );
   }
 
@@ -479,3 +505,18 @@ class _IndividualPageState extends State<IndividualPage> {
     );
   }
 }
+
+// ListView.builder(
+// itemCount: chatController.chatMessage.length,
+// controller: _scrollController,
+// shrinkWrap: true,
+// itemBuilder: (context, index) {
+// final eachMessage =
+// chatController.chatMessage[index];
+// if (eachMessage.sender == controllerr.currentUser!.id) {
+// return OwnMessageCard(messageData: eachMessage);
+// } else {
+// return ReplyCard(messageData: eachMessage);
+// }
+// },
+// );

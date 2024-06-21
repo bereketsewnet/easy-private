@@ -31,13 +31,11 @@ class UserController extends GetxController {
   Future<List<User>> getAllUsers(BuildContext context) async {
     LowerSnackBar lowerSnackBar = Get.find();
     UserController userController = Get.find();
-    userController.controlLoading(true);
     try {
       final url = Uri.parse(baseUrl + 'users');
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
-        userController.controlLoading(false);
         final List<dynamic> jsonData = jsonDecode(response.body);
         _allUsersList = jsonData.map((json) => User.fromJson(json)).toList();
         // Filter out the user with my ID
@@ -45,18 +43,15 @@ class UserController extends GetxController {
             .where((user) => user.id != userController.currentUser!.id)
             .toList();
         update();
-        userController.controlLoading(false);
         return _allUsersList = _allUsersList
             .where((user) => user.id != userController.currentUser!.id)
             .toList();
       } else {
         final errorJson = jsonDecode(response.body);
         final errorObject = ErrorMessage.fromJson(errorJson);
-        userController.controlLoading(false);
         lowerSnackBar.failureSnackBar(context, errorObject.message);
       }
     } catch (e) {
-      userController.controlLoading(false);
       lowerSnackBar.failureSnackBar(context, e.toString());
     }
     return [];

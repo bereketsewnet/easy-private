@@ -20,7 +20,7 @@ class ChatController extends GetxController {
     update();
   }
 
-  void getAllPrivateChatMessage(
+  Future<List<PrivateChatModel>> getAllPrivateChatMessage(
       BuildContext context, String sender, String receiver) async {
     RepositoryController repositoryController = Get.put(RepositoryController());
     LowerSnackBar lowerSnackBar = Get.find();
@@ -36,17 +36,20 @@ class ChatController extends GetxController {
           .map((message) => PrivateChatModel.fromJson(message))
           .toList();
       update();
-      return;
+      return jsonResponse
+          .map((message) => PrivateChatModel.fromJson(message))
+          .toList();
     } else if (response.statusCode == 404) {
       final errorData = jsonDecode(response.body);
       final errorMessage = ErrorMessage.fromJson(errorData);
-      return lowerSnackBar.failureSnackBar(context, errorMessage.message);
+      lowerSnackBar.failureSnackBar(context, errorMessage.message);
     } else if (response.statusCode == 500) {
       final errorData = jsonDecode(response.body);
       final errorMessage = ErrorMessage.fromJson(errorData);
-      return lowerSnackBar.failureSnackBar(context, errorMessage.message);
+      lowerSnackBar.failureSnackBar(context, errorMessage.message);
     } else {
-      return lowerSnackBar.failureSnackBar(context, 'Unknown Error!');
+      lowerSnackBar.failureSnackBar(context, 'Unknown Error!');
     }
+    return [];
   }
 }

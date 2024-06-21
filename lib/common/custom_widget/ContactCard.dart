@@ -1,10 +1,7 @@
 import 'package:Easy/Model/UserModel.dart';
 import 'package:Easy/common/custom_widget/ProfileCircle.dart';
 import 'package:Easy/pages/chat%20pages/IndividualPage.dart';
-import 'package:Easy/provider/controller/UserController.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:Easy/Model/ChatModel.dart';
 import 'package:get/get.dart';
 
 class ContactCard extends StatelessWidget {

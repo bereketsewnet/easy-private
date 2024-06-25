@@ -1,14 +1,13 @@
+import 'package:Easy/Model/Hive/HivePrivateChatModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 
-import '../../Model/PrivateChatModel.dart';
-
 class OwnMessageCard extends StatelessWidget {
   const OwnMessageCard({super.key, required this.messageData});
 
-  final PrivateChatModel messageData;
+  final HivePrivateChatModel messageData;
 
   @override
   Widget build(BuildContext context) {

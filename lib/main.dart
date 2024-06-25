@@ -4,13 +4,17 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'Model/Hive/HivePrivateChatModel.dart';
 import 'common/utils/colors.dart';
 
 late List<CameraDescription> cameras;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
- cameras = await availableCameras();
+  cameras = await availableCameras();
+  await Hive.initFlutter();
+  Hive.registerAdapter(HivePrivateChatModelAdapter());
   runApp(const MyApp());
 }
 
@@ -31,11 +35,10 @@ class MyApp extends StatelessWidget {
           iconTheme: IconThemeData(color: Colors.white),
           systemOverlayStyle: SystemUiOverlayStyle(
             statusBarColor: secondary,
-          )
+          ),
         ),
         floatingActionButtonTheme: const FloatingActionButtonThemeData(
           backgroundColor: primary,
-
         ),
       ),
       home: const LoginPage(),

@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:Easy/common/utils/colors.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import '../../Model/UserModel.dart';
 import '../../common/SocketConnection/SocketMethods.dart';
@@ -29,7 +28,8 @@ class _IndividualPageState extends State<IndividualPage> {
   bool showEmoji = false;
   SocketMethods socketMethods = Get.find();
   ChatController chatController = Get.find();
-  UserController controllerr = Get.find();
+  UserController userController = Get.find();
+  List<dynamic> chatMessages = [];
 
   // to change mic button to send button to set text
   bool sendButton = false;
@@ -39,7 +39,9 @@ class _IndividualPageState extends State<IndividualPage> {
   void initState() {
     super.initState();
     socketMethods.sendPrivateMessageSuccess();
-    getAllMessageList();
+    getHistoryMessages();
+    updateNewMessage();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
     focusNode.addListener(() {
       if (focusNode.hasFocus) {
         setState(() {
@@ -156,43 +158,17 @@ class _IndividualPageState extends State<IndividualPage> {
                   Expanded(
                     child: GetBuilder<ChatController>(
                       builder: (_) {
-                        return FutureBuilder<List<PrivateChatModel>>(
-                          future: chatController.getAllPrivateChatMessage(
-                            context,
-                            controllerr.currentUser!.id,
-                            widget.userModel.id,
-                          ),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              final messages = snapshot.data;
-                              return ListView.builder(
-                                itemCount: chatController.chatMessage.length,
-                                controller: _scrollController,
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) {
-                                  final eachMessage =
-                                      chatController.chatMessage[index];
-                                  if (eachMessage.sender ==
-                                      controllerr.currentUser!.id) {
-                                    return OwnMessageCard(
-                                      messageData: eachMessage,
-                                    );
-                                  } else {
-                                    return ReplyCard(
-                                      messageData: eachMessage,
-                                    );
-                                  }
-                                },
-                              );
-                            } else if (snapshot.hasError) {
-                              return const Center(
-                                child: Text('Error'),
-                              );
+                        return ListView.builder(
+                          itemCount: chatMessages.length,
+                          controller: _scrollController,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            final eachMessage = chatMessages[index];
+                            if (eachMessage.sender ==
+                                userController.currentUser!.id) {
+                              return OwnMessageCard(messageData: eachMessage);
                             } else {
-                              return const SpinKitDualRing(
-                                color: primary,
-                                size: 30,
-                              );
+                              return ReplyCard(messageData: eachMessage);
                             }
                           },
                         );
@@ -272,7 +248,7 @@ class _IndividualPageState extends State<IndividualPage> {
                                         ),
                                         IconButton(
                                           onPressed: () {
-                                            getAllMessageList();
+                                            getHistoryMessages();
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
@@ -309,7 +285,7 @@ class _IndividualPageState extends State<IndividualPage> {
                                           // sending the message
                                           sendMessage(textController.text);
                                           // scroll to button when sending message
-                                          scrollToButton();
+                                          _scrollToBottomAnimated();
                                           // and return to mic button icon
                                           setState(() {
                                             sendButton = false;
@@ -478,7 +454,7 @@ class _IndividualPageState extends State<IndividualPage> {
     );
   }
 
-  void scrollToButton() {
+  void _scrollToBottomAnimated() {
     _scrollController.animateTo(
       _scrollController.position.maxScrollExtent,
       duration: const Duration(milliseconds: 300),
@@ -486,10 +462,16 @@ class _IndividualPageState extends State<IndividualPage> {
     );
   }
 
+  void _scrollToBottom() {
+    if (_scrollController.hasClients) {
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    }
+  }
+
   void sendMessage(String messageText) {
     final message = PrivateChatModel(
       message: messageText,
-      sender: controllerr.currentUser!.id,
+      sender: userController.currentUser!.id,
       receiver: widget.userModel.id,
       timeStamp: '3:00 Am',
       isSeen: false,
@@ -497,26 +479,35 @@ class _IndividualPageState extends State<IndividualPage> {
     socketMethods.sendPrivateMessage(message);
   }
 
-  Future<void> getAllMessageList() async {
-    chatController.getAllPrivateChatMessage(
-      context,
-      controllerr.currentUser!.id,
-      widget.userModel.id,
-    );
+  void getHistoryMessages() async {
+    if (await chatController.getChatHistory(
+          userController.currentUser!.id,
+          widget.userModel.id,
+        ) !=
+        null) {
+      chatMessages = (await chatController.getChatHistory(
+        userController.currentUser!.id,
+        widget.userModel.id,
+      ))!;
+      _scrollToBottom();
+    }
+
+    setState(() {});
+  }
+
+  void updateNewMessage() async {
+    if (await chatController.getAllPrivateChatMessage(
+          context,
+          userController.currentUser!.id,
+          widget.userModel.id,
+        ) !=
+        null) {
+      chatMessages = (await chatController.getAllPrivateChatMessage(
+        context,
+        userController.currentUser!.id,
+        widget.userModel.id,
+      ))!;
+      _scrollToBottom();
+    }
   }
 }
-
-// ListView.builder(
-// itemCount: chatController.chatMessage.length,
-// controller: _scrollController,
-// shrinkWrap: true,
-// itemBuilder: (context, index) {
-// final eachMessage =
-// chatController.chatMessage[index];
-// if (eachMessage.sender == controllerr.currentUser!.id) {
-// return OwnMessageCard(messageData: eachMessage);
-// } else {
-// return ReplyCard(messageData: eachMessage);
-// }
-// },
-// );

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '../../Model/Hive/HivePrivateChatModel.dart';
 import '../../Model/PrivateChatModel.dart';
 
 class ReplyCard extends StatelessWidget {
   const ReplyCard({super.key, required this.messageData});
 
-  final PrivateChatModel messageData;
+  final HivePrivateChatModel messageData;
 
   @override
   Widget build(BuildContext context) {

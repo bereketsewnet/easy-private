@@ -3,8 +3,11 @@ import 'package:Easy/common/constants/ConstantValue.dart';
 import 'package:Easy/common/utils/android_permission.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+
+import '../../Model/Hive/HivePrivateChatModel.dart';
 
 class RepositoryController extends GetxController {
   AndroidPermission androidPermission = Get.put(AndroidPermission());
@@ -33,4 +36,5 @@ class RepositoryController extends GetxController {
     ids.sort();
     return ids.join('_');
   }
+
 }

@@ -39,9 +39,10 @@ class _IndividualPageState extends State<IndividualPage> {
   void initState() {
     super.initState();
     socketMethods.sendPrivateMessageSuccess();
+    socketMethods.errorReceiver(context);
+
     getHistoryMessages();
     updateNewMessage();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
     focusNode.addListener(() {
       if (focusNode.hasFocus) {
         setState(() {
@@ -49,6 +50,12 @@ class _IndividualPageState extends State<IndividualPage> {
         });
       }
     });
+  }
+
+  @override
+  void dispose() {
+   _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -156,19 +163,38 @@ class _IndividualPageState extends State<IndividualPage> {
               child: Column(
                 children: [
                   Expanded(
-                    child: GetBuilder<ChatController>(
+                    child: GetBuilder<SocketMethods>(
                       builder: (_) {
-                        return ListView.builder(
-                          itemCount: chatMessages.length,
-                          controller: _scrollController,
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            final eachMessage = chatMessages[index];
-                            if (eachMessage.sender ==
-                                userController.currentUser!.id) {
-                              return OwnMessageCard(messageData: eachMessage);
+                        return StreamBuilder<List<dynamic>>(
+                          stream: socketMethods.messageStream,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            } else if (snapshot.hasError) {
+                              return Center(
+                                  child: Text('Error: ${snapshot.error}'));
+                            } else if (!snapshot.hasData ||
+                                snapshot.data!.isEmpty) {
+                              return const Center(child: Text('No messages'));
                             } else {
-                              return ReplyCard(messageData: eachMessage);
+                              List<dynamic> chatHistory = snapshot.data!;
+                              return ListView.builder(
+                                itemCount: chatHistory.length,
+                                controller: _scrollController,
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) {
+                                  final eachMessage = chatHistory[index];
+                                  if (eachMessage.sender ==
+                                      userController.currentUser!.id) {
+                                    return OwnMessageCard(
+                                        messageData: eachMessage);
+                                  } else {
+                                    return ReplyCard(messageData: eachMessage);
+                                  }
+                                },
+                              );
                             }
                           },
                         );
@@ -285,7 +311,7 @@ class _IndividualPageState extends State<IndividualPage> {
                                           // sending the message
                                           sendMessage(textController.text);
                                           // scroll to button when sending message
-                                          _scrollToBottomAnimated();
+                                         // _scrollToBottomAnimated();
                                           // and return to mic button icon
                                           setState(() {
                                             sendButton = false;
@@ -473,41 +499,24 @@ class _IndividualPageState extends State<IndividualPage> {
       message: messageText,
       sender: userController.currentUser!.id,
       receiver: widget.userModel.id,
-      timeStamp: '3:00 Am',
+      timeStamp: 'serverTime Stamp Assign',
       isSeen: false,
     );
-    socketMethods.sendPrivateMessage(message);
+     socketMethods.sendPrivateMessage(message);
+     _scrollToBottomAnimated();
   }
 
   void getHistoryMessages() async {
-    if (await chatController.getChatHistory(
-          userController.currentUser!.id,
-          widget.userModel.id,
-        ) !=
-        null) {
-      chatMessages = (await chatController.getChatHistory(
-        userController.currentUser!.id,
-        widget.userModel.id,
-      ))!;
-      _scrollToBottom();
-    }
 
-    setState(() {});
   }
 
   void updateNewMessage() async {
-    if (await chatController.getAllPrivateChatMessage(
-          context,
-          userController.currentUser!.id,
-          widget.userModel.id,
-        ) !=
-        null) {
-      chatMessages = (await chatController.getAllPrivateChatMessage(
-        context,
-        userController.currentUser!.id,
-        widget.userModel.id,
-      ))!;
-      _scrollToBottom();
-    }
+    socketMethods.getAllOneToOneChatMessageGivenUser(
+      userController.currentUser!.id,
+      widget.userModel.id,
+    );
+    socketMethods.getAllOneToOneChatGivenUserListener();
+    _scrollToBottom();
+
   }
 }

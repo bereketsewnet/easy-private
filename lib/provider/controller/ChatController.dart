@@ -35,7 +35,7 @@ class ChatController extends GetxController {
   Future<List<dynamic>?> getChatHistory(String sender, String receiver) async {
     final box = await openBox();
     String roomId = repositoryController.generateRoomId(sender, receiver);
-    box.delete(roomId);
+    //box.delete(roomId);
     return box.get(roomId, defaultValue: null);
   }
 

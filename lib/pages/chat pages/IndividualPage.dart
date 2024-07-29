@@ -54,7 +54,7 @@ class _IndividualPageState extends State<IndividualPage> {
 
   @override
   void dispose() {
-   _scrollController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -311,7 +311,7 @@ class _IndividualPageState extends State<IndividualPage> {
                                           // sending the message
                                           sendMessage(textController.text);
                                           // scroll to button when sending message
-                                         // _scrollToBottomAnimated();
+                                          // _scrollToBottomAnimated();
                                           // and return to mic button icon
                                           setState(() {
                                             sendButton = false;
@@ -461,22 +461,20 @@ class _IndividualPageState extends State<IndividualPage> {
   }
 
   Widget emojiSelect() {
-    return Container(
-      child: EmojiPicker(
-        textEditingController: textController,
-        onEmojiSelected: (category, emoji) {
-          String value = textController.toString().trim();
-          if (value.isNotEmpty) {
-            setState(() {
-              sendButton = true;
-            });
-          } else {
-            setState(() {
-              sendButton = false;
-            });
-          }
-        },
-      ),
+    return EmojiPicker(
+      textEditingController: textController,
+      onEmojiSelected: (category, emoji) {
+        String value = textController.toString().trim();
+        if (value.isNotEmpty) {
+          setState(() {
+            sendButton = true;
+          });
+        } else {
+          setState(() {
+            sendButton = false;
+          });
+        }
+      },
     );
   }
 
@@ -502,12 +500,18 @@ class _IndividualPageState extends State<IndividualPage> {
       timeStamp: 'serverTime Stamp Assign',
       isSeen: false,
     );
-     socketMethods.sendPrivateMessage(message);
-     _scrollToBottomAnimated();
+    socketMethods.sendPrivateMessage(message);
+    //_scrollToBottomAnimated();
   }
 
   void getHistoryMessages() async {
-
+    final chatHistory = await chatController.getChatHistory(
+      userController.currentUser!.id,
+      widget.userModel.id,
+    );
+    if (chatHistory != null && chatHistory.isNotEmpty) {
+      socketMethods.messageController.add(chatHistory);
+    }
   }
 
   void updateNewMessage() async {
@@ -517,6 +521,5 @@ class _IndividualPageState extends State<IndividualPage> {
     );
     socketMethods.getAllOneToOneChatGivenUserListener();
     _scrollToBottom();
-
   }
 }

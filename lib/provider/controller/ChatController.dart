@@ -1,16 +1,8 @@
-import 'dart:convert';
-
-import 'package:Easy/Model/ErrorMessage.dart';
-import 'package:Easy/common/SnackBar/lower_snack_bar.dart';
-import 'package:Easy/common/constants/ConstantValue.dart';
 import 'package:Easy/provider/controller/RepositoryController.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
-import 'package:http/http.dart' as http;
-
 import '../../Model/Hive/HivePrivateChatModel.dart';
-import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ChatController extends GetxController {
   RepositoryController repositoryController = Get.put(RepositoryController());
@@ -22,13 +14,16 @@ class ChatController extends GetxController {
 
 
   Future<Box> openBox() async {
-    return await Hive.openBox('privateChatBox');
+    //await box.deleteFromDisk();
+    return await Hive.openBox('LocalUserDatabase');
   }
 
   Future<void> saveChatHistory(List<HivePrivateChatModel> chatHistory, String sender, String receiver) async {
     final box = await openBox();
     String roomId = repositoryController.generateRoomId(sender, receiver);
-    await box.put(roomId, chatHistory);
+    List<HivePrivateChatModel> existingChatHistory = await box.get(roomId) ?? [];
+    List<HivePrivateChatModel> collectionChat = [...existingChatHistory, ...chatHistory];
+    await box.put(roomId, collectionChat);
   }
 
 
@@ -53,5 +48,19 @@ class ChatController extends GetxController {
 
     // Save the updated chat history back to Hive
     await box.put(roomId, chatHistory);
+  }
+
+  Future<void> saveMessageOrder(String sender, String receiver, int messageOrder) async{
+    String roomId = repositoryController.generateRoomId(sender, receiver);
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(roomId, messageOrder);
+
+  }
+
+  Future<int?> getMessageOrder(String sender, String receiver) async{
+    String roomId = repositoryController.generateRoomId(sender, receiver);
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    //prefs.remove(roomId);
+    return prefs.getInt(roomId);
   }
 }

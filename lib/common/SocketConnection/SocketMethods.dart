@@ -32,10 +32,14 @@ class SocketMethods extends GetxController {
     _socketClient.emit('sendPrivateMessage', message.toJson());
   }
 
-  void getAllOneToOneChatMessageGivenUser(String sender, String receiver) {
+  Future<void> getAllOneToOneChatMessageGivenUser(
+      String sender, String receiver) async {
+    int messageOrder =
+        await chatController.getMessageOrder(sender, receiver) ?? 0;
     final data = {
       'sender': sender,
       'receiver': receiver,
+      'messageOrder': messageOrder,
     };
     _socketClient.emit('get-all-one-to-one-chat-given-user', data);
   }
@@ -79,13 +83,17 @@ class SocketMethods extends GetxController {
   }
 
   getAllOneToOneChatGivenUserListener() {
-    _socketClient.on('get-all-one-to-one-chat-given-user-listener', (data) {
+    // firstly all set empty list
+    List<HivePrivateChatModel> empty = [];
+    _messageController.add(empty);
+    _socketClient.on('get-all-one-to-one-chat-given-user-listener',
+        (data) async {
       DateFormat inputFormat = DateFormat('EEE MMM dd yyyy HH:mm:ss');
       DateFormat outputDateFormat = DateFormat.yMd(); // e.g. 1/1/2022
       DateFormat outputTimeFormat = DateFormat.jm(); // e.g. 5:08 PM
 
       // save in to local database
-      List<dynamic> chatHistory = data.map((message) {
+      List<dynamic> latestMessage = data.map((message) {
         String timeStampString =
             message['timeStamp']; // Get the timestamp string for each message
         String cleanedTimeStampString =
@@ -108,22 +116,37 @@ class SocketMethods extends GetxController {
 
       // this for change list of dynamic to list of HiveModel to insert chat history
       List<HivePrivateChatModel> tempVar = [];
-      for (int i = 0; i < chatHistory.length; i++) {
+      for (int i = 0; i < latestMessage.length; i++) {
         HivePrivateChatModel temp = HivePrivateChatModel(
-          messageId: chatHistory[i].messageId,
-          message: chatHistory[i].message,
-          sender: chatHistory[i].sender,
-          receiver: chatHistory[i].receiver,
-          timeStamp: chatHistory[i].timeStamp,
-          isSeen: chatHistory[i].isSeen,
+          messageId: latestMessage[i].messageId,
+          message: latestMessage[i].message,
+          sender: latestMessage[i].sender,
+          receiver: latestMessage[i].receiver,
+          timeStamp: latestMessage[i].timeStamp,
+          isSeen: latestMessage[i].isSeen,
         );
         tempVar.add(temp);
       }
 
-     // save in local database
-      chatController.saveChatHistory(tempVar, data[0]['sender'], data[0]['receiver']);
+      // save in local database
+      await chatController.saveChatHistory(
+          tempVar, data[0]['sender'], data[0]['receiver']);
+      // save in to shared prefs messageOrder
+      await chatController.saveMessageOrder(
+        data[0]['sender'],
+        data[0]['receiver'],
+        data[data.length - 1]['messageOrder'],
+      );
 
-      _messageController.add(chatHistory);
+      final chatHistory = await chatController.getChatHistory(
+        data[0]['sender'],
+        data[0]['receiver'],
+      );
+      if (chatHistory != null && chatHistory.isNotEmpty) {
+        _messageController.add(chatHistory);
+      } else {
+        _messageController.add(latestMessage);
+      }
 
       update();
     });
@@ -133,7 +156,6 @@ class SocketMethods extends GetxController {
     //LowerSnackBar lowerSnackBar = Get.find();
     _socketClient.on('errorReceiver', (data) {
       //lowerSnackBar.failureSnackBar(context, data);
-      print('--------- $data ----------');
       _messageController.add(temp);
     });
   }

@@ -40,7 +40,6 @@ class _IndividualPageState extends State<IndividualPage> {
     super.initState();
     socketMethods.sendPrivateMessageSuccess();
     socketMethods.errorReceiver(context);
-
     getHistoryMessages();
     updateNewMessage();
     focusNode.addListener(() {

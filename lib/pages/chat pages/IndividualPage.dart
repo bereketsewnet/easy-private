@@ -1,3 +1,4 @@
+import 'package:Easy/Model/Hive/HivePrivateChatModel.dart';
 import 'package:Easy/Model/PrivateChatModel.dart';
 import 'package:Easy/provider/controller/ChatController.dart';
 import 'package:Easy/provider/controller/UserController.dart';
@@ -510,6 +511,9 @@ class _IndividualPageState extends State<IndividualPage> {
     );
     if (chatHistory != null && chatHistory.isNotEmpty) {
       socketMethods.messageController.add(chatHistory);
+    }else {
+      List<HivePrivateChatModel> empty = [];
+      socketMethods.messageController.add(empty);
     }
   }
 

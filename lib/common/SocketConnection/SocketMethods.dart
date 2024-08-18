@@ -83,9 +83,6 @@ class SocketMethods extends GetxController {
   }
 
   getAllOneToOneChatGivenUserListener() {
-    // firstly all set empty list
-    List<HivePrivateChatModel> empty = [];
-    _messageController.add(empty);
     _socketClient.on('get-all-one-to-one-chat-given-user-listener',
         (data) async {
       DateFormat inputFormat = DateFormat('EEE MMM dd yyyy HH:mm:ss');
@@ -153,10 +150,10 @@ class SocketMethods extends GetxController {
   }
 
   void errorReceiver(BuildContext context) {
-    //LowerSnackBar lowerSnackBar = Get.find();
-    _socketClient.on('errorReceiver', (data) {
-      //lowerSnackBar.failureSnackBar(context, data);
-      _messageController.add(temp);
+    _socketClient.on('errorReceiver', (data) async {
+      if (data != 'No messages found') {
+        _messageController.add(temp);
+      }
     });
   }
 
